@@ -1,6 +1,6 @@
 # 🍺 WER WIRD BIERLIONÄR?
 
-Eine komplett lokal laufende, moderierte Familien-Quizshow mit Glücksrad, 244 Multiple-Choice-Fragen (davon 100 nur für die steigende Klassik-Gewinnleiter), 8 Jokern, 4 Spielmodi, Chaos-Ereignissen, Familien-Challenges, Live-Ranking, Schätzfinale, goldener Bier-Trophäe und geheimem Braukurs-Gutschein.
+Eine komplett lokal laufende, moderierte Familien-Quizshow mit Glücksrad, 164 unterschiedliche Multiple-Choice-Fragen (davon 120 in der steigenden Klassik-Gewinnleiter), 8 Jokern, 4 Spielmodi, Chaos-Ereignissen, Familien-Challenges, Live-Ranking, Schätzfinale, goldener Bier-Trophäe und geheimem Braukurs-Gutschein.
 
 **Keine Installation, kein Konto, keine Datenbank und kein Framework nötig.** Alle Dateien liegen direkt im Verzeichnis.
 
@@ -33,7 +33,7 @@ Hinweis: GitHub Pages ist ein statisches Hosting-Angebot. Die Website benötigt 
 
 **Andere Modi:** Einfache Fragen +100 BP, mittlere +150 BP, schwere +200 BP. Falsche Antwort: bis zu −50 BP; Punktestände fallen nicht unter null. Ein Zusatzjoker oder Chaos-Ereignis kann diese Werte ändern.
 
-**Fragen:** Klassik erhält **100 neue Fragen auf genau 10 ansteigenden Schwierigkeitsstufen**: leichte Einstiegsfragen, kniffliges Allgemeinwissen und zunehmend unangenehme Logik-/Quatschfragen. Jede Person erhält andere Fragen derselben Stufe; wenn ein Stufenpool vollständig verbraucht wäre, kann erst dann eine Frage wiederkehren. Die übrigen Modi verwenden wie bisher den gemischten Pool mit 144 Fragen.
+**Fragen:** Klassik erhält **120 kuratierte Fragen auf genau 10 ansteigenden Schwierigkeitsstufen (12 Fragen je Stufe)**. Die Einstiegsstufen sind lösbar, die späteren verlangen Spezialwissen, echte kuriose Fakten und Logik. Der Pool der anderen Modi umfasst **164 unterschiedliche Fragen** und enthält fast keine Rechnerei.
 
 **Joker:** In den drei bisherigen Modi erhalten alle Teilnehmenden zufällig zwei Joker am Spielanfang. Im Klassikmodus starten alle fair mit drei Jokern: dem 50:50-Joker, einem Familienhilfe-Joker und einem zufälligen Chaos-Joker. Jeder Joker ist einmal einsetzbar. Pro Frage darf maximal einer eingesetzt werden. Auch der Moderator erhält eine Beschreibung der Wirkung auf dem Bildschirm.
 
@@ -58,17 +58,18 @@ Hinweis: GitHub Pages ist ein statisches Hosting-Angebot. Die Website benötigt 
 
 ## Fragen bearbeiten oder ergänzen
 
-Die Fragen liegen in `questions.js`. Jeder Datensatz ist eine eigene Zeile und besteht aus:
+Alle Fragen stehen in `questions.js` in den Listen `CLASSIC_QUESTIONS` und `EXTRA_QUESTIONS`. Sie haben die Felder `level` (Klassikstufe 1–10), `category`, `text`, `options` (Antworten A–D), `correct` (Index 0–3) und `explanation` (Moderatoren-Pointe nach der Auflösung). Die Reihenfolge der Antwortmöglichkeiten variiert je Frage.
 
-`Schwierigkeit | Frage | Antwort A | Antwort B | Antwort C | Antwort D | richtige Antwort (0=A, 1=B, 2=C, 3=D) | Erklärung`
+Für eigene Insider-Fragen kannst du ein bestehendes Frageobjekt kopieren und Text, Antworten und `correct` ändern. Achte darauf, dass `correct` tatsächlich auf die richtige Antwort zeigt. **Keine privaten Gutscheincodes eintragen.** Die Schätzfragen sind `ESTIMATES`, die Familien-Challenges `FAMILY`.
 
-Beispiel:
+## Faktencheck – Auswahl der Quellen
 
-`1|Wie viele Liter hat eine bayerische Maß?|0,5|1|1,5|2|1|Ein Liter. Prost!`
-
-Setze die Zeile in einer der `add('Kategorie', \` ... \`)`-Gruppen ein. Achte darauf, kein `|` innerhalb der Texte zu verwenden.
-
-Die Klassikfragen stehen in `questions.js` in `CLASSIC_QUESTIONS`, sortiert nach den Stufen 1 bis 10. Schätzfragen und Familien-Challenges stehen in derselben Datei in `ESTIMATES` und `FAMILY`.
+- Deutscher Brauer-Bund zu Reinheitsgebot und Hefe: https://brauer-bund.de/reinheitsgebot/fragen-und-antworten/
+- Brewers Association zu Bierstilen: https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/
+- NASA zur Venus: https://science.nasa.gov/venus/venus-facts/
+- University of Tasmania zu Wombat-Kot: https://www.utas.edu.au/about/news-and-stories/articles/2021/scientists-get-to-the-bottom-of-wombat-cubed-poo-mystery2
+- NOAA zu Seepferdchen: https://oceanservice.noaa.gov/facts/seahorse.html
+- Smithsonian Zoo zu Flamingos: https://nationalzoo.si.edu/animals/news/why-are-flamingos-pink-and-other-flamingo-facts
 
 ## Technisches & Hinweise
 
@@ -103,3 +104,12 @@ In dieser Version wird am Ende der Geburtstagsshow der echte Jochen-Schweizer-Gu
 **WICHTIG:** Den Original-Gutschein `VJD1628846593619_A4.pdf` **nicht** auf das öffentliche GitHub-Repository hochladen! Der Original-PDF-Gutschein enthält einen einlösbaren Code, der sonst für alle sichtbar und nutzbar wäre. Den Original-Gutschein lieber ausdrucken oder privat übergeben.
 
 Die Bild- und PDF-Vorschau enthalten keinen Gutscheincode und keinen QR-Code. Die Originaldatei ist nicht Bestandteil dieses ZIP-Pakets.
+
+## Version 4 – Das neue Fragen-Update
+
+- **120 Klassikfragen** mit 12 einzigartigen Fragen je Gewinnstufe statt leichtem Mathequiz.
+- **44 zusätzliche Fragen**; auch Chaos, Battle und Geburtstags-Special verwenden den neuen Pool.
+- Mehr Bierwissen, Geschichte, Tiere, verblüffende Fakten und fiese Quatschlogik.
+- **18 überarbeitete Schätzfinal-Fragen** mit historischen Jahreszahlen und kuriosen Zahlen statt überwiegend Kopfrechnen.
+- Spielmechanik, Spielerwechsel, Gewinnleiter, Joker, Design und die sichere Braukurs-Gutschein-Vorschau bleiben unverändert.
+- Die Original-PDF mit Gutschein-Code bleibt weiterhin außerhalb von GitHub.

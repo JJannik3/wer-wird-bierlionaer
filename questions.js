@@ -1,196 +1,2377 @@
-/* Fragenpool: 144 reguläre und 100 nach Stufe sortierte Klassik-Fragen, 18 Schätzfinals und Familien-Challenges.
-   Format: Schwierigkeit | Frage | A | B | C | D | korrekte Antwort (0-3) | Erklärung
-   Du kannst jederzeit Fragen hinzufügen oder ändern. */
+/* BIERLIONÄR V4 — neue, kuratierte Fragen.
+   Klassik: pro Gewinnstufe 12 unterschiedliche Multiple-Choice-Fragen;
+   alle anderen Modi: gemischter Pool mit den Klassikfragen und 44 weiteren Fakten.
+   Nach jeder Auflösung gibt es eine kurze, meist absurde Erklärung.
+   Fragen lassen sich weiter unten in CLASSIC_QUESTIONS und EXTRA_QUESTIONS ändern. */
 (() => {
-  const QUESTIONS = [];
-  const add = (category, body) => body.trim().split('\n').map(line => {
-    const [difficulty, text, a, b, c, d, correct, explanation] = line.split('|').map(s => s.trim());
-    if (!explanation) throw Error('Fehlerhafte Frage: ' + line);
-    QUESTIONS.push({ category, difficulty: Number(difficulty), text, options: [a,b,c,d], correct: Number(correct), explanation });
-  });
-
-  add('🍺 Bier & Brauen', `
-1|Wie nennt man das Auflösen von Malzinhaltsstoffen in warmem Wasser beim Brauen?|Maischen|Schmoren|Panschen|Pökeln|0|Maischen heißt der Arbeitsschritt. Klingt nach Küchenunfall, ist aber Handwerk.
-1|Was bedeutet „Helles“ bei Bier vor allem?|Es wird im Dunkeln gebraut|Es ist hell in der Farbe|Es enthält gar keinen Hopfen|Es leuchtet im Dunkeln|1|Helles ist ein helles, meist untergäriges Lagerbier.
-1|Wie viel Liter fasst eine klassische bayerische Maß?|0,33 Liter|0,5 Liter|1 Liter|2 Liter|2|Eine Maß = ein Liter. Über den Schaum wird trotzdem leidenschaftlich diskutiert.
-1|Welche Zutat gibt Bier typischerweise die Bitterkeit?|Hopfen|Salz|Kartoffeln|Gurkenwasser|0|Die Bitterstoffe stammen hauptsächlich vom Hopfen.
-1|Was bildet sich beim Gären durch die Hefe?|Goldstaub und Glitzer|Alkohol und Kohlendioxid|Milch und Honig|Nur Schaum|1|Hefe wandelt vergärbaren Zucker vor allem in Alkohol und CO₂ um.
-1|Was ist Malz meistens?|Geröstete Kartoffel|Gekeimtes und getrocknetes Getreide|Getrocknete Zitrone|Pulverisierte Brezel|1|Für Bier verwendet man häufig Gerstenmalz.
-1|Wofür steht die Abkürzung IBU auf Bieretiketten?|International Beer Units|International Bitterness Units|Institut für Bier-Unfälle|Iron Beer Upgrade|1|IBU ist eine Maßeinheit für die berechnete Bittere des Biers.
-1|Welche Farbe hat klassisches Pils meist?|Hellgold|Tiefschwarz|Pink|Türkis|0|Pils ist gewöhnlich hellgold und deutlich gehopft.
-1|Was sorgt normalerweise für den Schaum auf Bier?|Kleine Luftballons|Kohlendioxid und schaumstabilisierende Stoffe|Nur der Glasrand|Der Kühlschrank|1|CO₂ bildet Blasen; Eiweiße und andere Stoffe stabilisieren sie.
-1|Welche Getreideart ist bei klassischem Weizenbier namensgebend?|Reis|Roggen|Weizen|Hafer|2|Verrückt, aber wahr: Weizenbier enthält Weizen.
-2|Wann wurde das berühmte bayerische Reinheitsgebot erlassen?|1516|1810|1945|2001|0|1516. Das wissen sogar manche, die ihre eigene Postleitzahl vergessen.
-2|Was bedeutet obergärig beim Bier?|Die Hefe sammelt sich beim Gären eher oben|Man braut auf Bergen|Es gibt mehr Schaum|Die Flasche muss aufrecht stehen|0|Der Begriff bezieht sich auf das Gärverhalten der Hefe.
-2|Was ist die „Würze“ beim Bierbrauen?|Gewürzmischung aus dem Supermarkt|Zuckerhaltige Flüssigkeit vor der Gärung|Das Etikett|Die letzte Runde|1|Die Würze entsteht nach dem Maischen und Läutern.
-2|Wobei hilft das Läutern?|Trennen der flüssigen Würze von den festen Bestandteilen|Bier lauter machen|Hefe einfrieren|Gläser polieren|0|Beim Läutern werden Treber und Würze getrennt.
-2|Was ist ein IPA?|Indian Party Alarm|India Pale Ale|International Pils Association|Italienischer Pfirsich Aperitif|1|India Pale Ale ist häufig deutlich hopfenbetont.
-2|Was ist Treber?|Der Rest des ausgelaugten Malzes|Ein spezielles Bierglas|Der Braumeister-Gehilfe|Ein Zapfhahn|0|Treber ist der feste Rückstand nach dem Läutern.
-2|Wozu dient die Hopfengabe beim Kochen?|Unter anderem für Bittere und Aroma|Damit das Bier blau wird|Zum Einfrieren|Damit die Hefe mehr schläft|0|Je nach Zeitpunkt bringt Hopfen Bittere, Geschmack und Aroma.
-2|Was misst ein Refraktometer beim Brauen typischerweise?|Zuckergehalt beziehungsweise Brechungsindex|Die Größe des Braumeisters|Schaumhöhe im Stadion|Hopfenfarbe bei Nacht|0|Mit dem Brechungsindex lässt sich die Konzentration gelöster Stoffe abschätzen.
-2|Wie nennt man das gezielte Zugeben von Hopfen nach der Hauptgärung?|Kalthopfung / Dry Hopping|Warmduschen|Fassflüstern|Hopfenjonglage|0|Kalthopfung bringt vor allem Hopfenaromen ins Bier.
-2|Was ist ein untergäriger Bierstil?|Pils|Klassisches Hefeweizen|Belgisches Saison|Traditionelles Kölsch|0|Pils wird mit untergäriger Hefe gebraut.
-3|Wie heißt die Dichtekennzahl für Würze vor der Gärung oft?|Stammwürze|Endgeschwindigkeit|Druckhöhe|Malzgewicht pro Glas|0|Die Stammwürze beschreibt gelöste Inhaltsstoffe in der Würze.
-3|Welches Gas kann bei der Gärung in geschlossenen Räumen gefährlich werden?|Helium|Kohlendioxid|Neon|Sauerstoff aus der Flasche|1|CO₂ kann Sauerstoff verdrängen. Brauereien brauchen gute Lüftung.
-3|Was bewirkt die Eiweißrast bei bestimmten Maischverfahren?|Beeinflusst den Abbau größerer Eiweißmoleküle|Gefriert die Maische|Entfernt alle Hopfenöle|Tötet jede Hefe im Umkreis|0|Temperatur und Zeit steuern enzymatische Vorgänge.
-3|Was ist eine Dekoktion?|Teilmaische abkochen und zurückgeben|Bier mit Limo mischen|Hefe im Eiswürfel einfrieren|Zapfanlage desinfizieren|0|Dekoktion ist ein klassisches Maischverfahren.
-`);
-
-  add('🧠 Unnützes Weltwissen', `
-1|Wie viele Herzen hat ein Oktopus?|Eins|Zwei|Drei|Sieben|2|Drei Herzen. Mehr als so mancher Familienchat.
-1|Welche Farbe hat die „Black Box“ im Flugzeug normalerweise?|Schwarz|Orange|Lila|Durchsichtig|1|Leuchtendes Orange hilft beim Wiederfinden.
-1|Wie viele Beine hat eine Spinne normalerweise?|Vier|Sechs|Acht|Zehn|2|Acht. Und trotzdem schafft sie es an die Zimmerdecke.
-1|Was ist die Hauptstadt von Australien?|Sydney|Melbourne|Canberra|Perth|2|Canberra. Sydney hat leider nur den Ruhm.
-1|Welches Tier ist das größte heute lebende Landtier?|Nilpferd|Afrikanischer Elefant|Giraffe|Nashorn|1|Der Afrikanische Elefant ist das Schwergewicht unter den Landtieren.
-1|Wie viele Seiten hat ein Würfel?|Vier|Fünf|Sechs|Acht|2|Sechs. Bei der Familienrunde zählen die Würfelseiten, nicht deine Ausreden.
-1|Welcher Planet ist der Sonne am nächsten?|Venus|Mars|Merkur|Jupiter|2|Merkur hält die Poleposition.
-1|Aus welcher Pflanze wird traditionell Tequila hergestellt?|Agave|Kaktusfeige|Ananas|Hopfen|0|Tequila wird aus Blauer Agave hergestellt.
-1|Wie viele Minuten hat eine Stunde?|50|60|100|120|1|60. Außer wenn man auf den Kuchen wartet.
-1|Was misst ein Thermometer?|Gewicht|Temperatur|Geschwindigkeit|Lautstärke|1|Ein Thermometer misst Temperatur, nicht Geduld.
-2|Welche dieser Hauptstädte liegt am weitesten nördlich?|Berlin|Madrid|Oslo|Rom|2|Oslo liegt deutlich nördlicher.
-2|Wie viele Felder hat ein normales Schachbrett?|36|64|81|100|1|Acht mal acht = 64.
-2|Welches Säugetier kann aktiv fliegen?|Fledermaus|Flughörnchen|Koala|Känguru|0|Flughörnchen gleiten nur; Fledermäuse fliegen aktiv.
-2|Welches chemische Symbol steht für Gold?|Go|Au|Ag|Gd|1|Au kommt vom lateinischen Aurum.
-2|Wie viele Zähne hat ein erwachsener Mensch typischerweise maximal inklusive Weisheitszähnen?|24|28|32|36|2|Normalerweise sind es maximal 32.
-2|Was wurde als erstes erfunden?|Das Telefon|Der Buchdruck mit beweglichen Lettern in Europa|Das Internet|Das Flugzeug|1|Gutenbergs Buchdruck ist viel älter als Telefon und Flugzeug.
-2|Was ist ein Axolotl?|Ein Salamander|Ein tropischer Vogel|Eine Algenart|Ein Schneckenhaus|0|Axolotl sind mexikanische Schwanzlurche und echte Internetstars.
-2|Welche dieser Sprachen gehört zur romanischen Sprachfamilie?|Deutsch|Finnisch|Spanisch|Türkisch|2|Spanisch stammt wie Französisch aus dem Lateinischen.
-2|Welche dieser Zahlen ist eine Primzahl?|21|27|29|33|2|29 ist nur durch 1 und 29 teilbar.
-2|Wofür steht die Abkürzung „www“?|World Wide Web|Wild Waffle Weekend|Wide World Watch|Web With Widgets|0|World Wide Web. Nicht World Wide Wurst.
-3|Welches Element hat die Ordnungszahl 8?|Stickstoff|Sauerstoff|Kohlenstoff|Wasserstoff|1|Sauerstoff steht an Position 8 im Periodensystem.
-3|Wie viele Zeitzonen hat die Erde in der idealisierten 15-Grad-Einteilung?|12|18|24|36|2|360 Grad geteilt durch 15 ergibt 24 idealisierte Zeitzonen.
-3|Welcher Planet dreht sich am langsamsten um die eigene Achse?|Jupiter|Erde|Venus|Neptun|2|Venus benötigt ungefähr 243 Erdtage pro Eigenrotation.
-3|Was ist die größte Wüste der Erde nach Fläche?|Sahara|Gobi|Antarktische Wüste|Kalahari|2|Auch Kältewüsten sind Wüsten. Die Antarktis ist die größte.
-`);
-
-  add('🤡 Völliger Quatsch', `
-1|Was wiegt mehr: 1 kg Federn oder 1 kg Bierdeckel?|Federn|Bierdeckel|Beides gleich viel|Kommt auf den Wirt an|2|Ein Kilogramm bleibt ein Kilogramm. Auch am Stammtisch.
-1|Du hast drei Äpfel und nimmst zwei weg. Wie viele hast du?|Einen|Zwei|Drei|Keinen|1|Du hast die zwei, die du genommen hast.
-1|Was wird beim Trocknen immer nasser?|Ein Handtuch|Ein Schwamm|Ein Zapfhahn|Ein Keks|0|Das Handtuch wird nass, während es etwas anderes trocknet.
-1|Was hat einen Hals, aber keinen Kopf?|Eine Flasche|Eine Giraffe|Ein Krokodil|Ein Onkel|0|Flaschenhals. Der Klassiker mit leichter Kneipenatmosphäre.
-1|Was hat vier Beine, kann aber nicht laufen?|Ein Tisch|Ein Hund|Eine Katze|Ein Pferd|0|Der Tisch wartet seit Jahren auf seinen ersten Spaziergang.
-1|Was kommt einmal in „Minute“, zweimal in „Moment“ und nie in „Stunde“ vor?|Der Buchstabe M|Ein Bier|Der Buchstabe E|Das Wort Zeit|0|Das M kommt in Minute einmal und in Moment zweimal vor.
-1|Was kannst du brechen, ohne es zu berühren?|Ein Versprechen|Ein Teller|Eine Tasse|Einen Bleistift|0|Versprechen kann man leider komplett kontaktlos brechen.
-1|Welche Frage kannst du nicht ehrlich mit „Ja“ beantworten, wenn sie stimmt?|Schläfst du gerade?|Hast du Hunger?|Bist du hier?|Kennst du Bier?|0|Wer wirklich schläft, antwortet nicht ehrlich mit Ja.
-1|Was hat Zähne, kann aber nicht beißen?|Ein Kamm|Ein Hai|Ein Wolf|Ein Nachbar|0|Kämme sind äußerst zahm.
-1|Was läuft, hat aber keine Beine?|Die Nase|Das Pferd|Der Hund|Der Kellner|0|Eine Nase kann laufen. Das macht sie im Winter besonders gern.
-2|Welcher Monat hat 28 Tage?|Nur Februar|Jeder Monat|Nur Dezember|Keiner|1|Alle Monate haben mindestens 28 Tage.
-2|Wie oft kann man 10 von 100 abziehen?|Zehnmal|Fünfmal|Einmal|Unendlich oft|2|Nach dem ersten Mal ziehst du 10 von 90 ab.
-2|Was kann um die Welt reisen und bleibt trotzdem in der Ecke?|Eine Briefmarke|Ein Stuhl|Ein Fernseher|Ein Schuh|0|Die Briefmarke klebt in der Ecke des Umschlags.
-2|Ein Hahn legt ein Ei aufs Dach. Wohin rollt es?|Nach links|Nach rechts|Gar nicht|Zum Nachbarn|2|Hähne legen keine Eier. Das ist für manche überraschend.
-2|Was ist voller Löcher und hält trotzdem Wasser?|Ein Schwamm|Ein Sieb aus Draht|Eine kaputte Tasse|Ein löchriger Eimer|0|Der Schwamm nutzt viele kleine Poren.
-2|Wenn ein rotes Haus aus roten Steinen besteht und ein blaues aus blauen, woraus ist ein Gewächshaus?|Grünen Steinen|Glas|Holz|Hoffnung|1|Ein Gewächshaus ist gewöhnlich aus Glas oder transparentem Material.
-2|Was gehört dir, wird aber öfter von anderen benutzt?|Dein Name|Dein Kühlschrank|Dein Pullover|Dein Schlüssel|0|Andere sagen deinen Namen viel öfter als du selbst.
-2|Was wird größer, je mehr man wegnimmt?|Ein Loch|Ein Baum|Ein Glas|Eine Pizza|0|Ein Loch wächst durch Wegnehmen.
-2|Was kannst du behalten, nachdem du es jemandem gegeben hast?|Dein Wort|Deine Zahnbürste|Dein Fahrrad|Dein Handy|0|Man kann sein Wort geben und halten.
-2|Wo befindet sich Freitag vor Donnerstag?|Im Kalender|Im Wörterbuch|In dieser Woche|In Bayern|1|Alphabetisch kommt Freitag vor Donnerstag.
-3|Welche Zahl erhältst du, wenn du 30 durch 1/2 teilst und 10 addierst?|25|40|70|100|2|30 durch 0,5 = 60; plus 10 = 70.
-3|Ein Bauer hat 17 Schafe. Alle bis auf 9 laufen weg. Wie viele bleiben?|8|9|17|0|1|Alle bis auf neun bedeutet: neun sind noch da.
-3|Du fährst einen Bus. An der ersten Haltestelle steigen 4 ein, an der zweiten 3 aus. Wie alt ist der Fahrer?|7|23|So alt wie du|Unbekannt|2|Du fährst den Bus. Gute Fahrt!
-3|Was ist am Ende des Regenbogens?|Ein Goldtopf|Der Buchstabe N|Eine Wolke|Ein Bierfass|1|Im Wort Regenbogen steht am Ende ein N.
-`);
-
-  add('🕵️ Wahr oder Unsinn?', `
-1|Welche Aussage stimmt?|Pinguine können fliegen|Bananen wachsen an krautigen Pflanzen|Der Mond hat eigenes Licht|Spinnen haben sechs Beine|1|Die Bananenpflanze ist botanisch eine riesige krautige Pflanze.
-1|Was stimmt tatsächlich?|Honig kann bei guter Lagerung sehr lange haltbar bleiben|Wasser ist immer lila|Elefanten haben Flügel|Salz schmilzt bei Zimmertemperatur|0|Honig ist durch wenig Wasser und weitere Eigenschaften sehr haltbar.
-1|Welche Aussage über Haie ist richtig?|Alle Haie leben im Süßwasser|Haie sind Fische|Haie sind Säugetiere|Alle Haie sind kleiner als 1 Meter|1|Haie sind Knorpelfische.
-1|Was ist richtig?|Tomaten sind botanisch Früchte|Karotten sind Früchte|Kartoffeln wachsen am Baum|Äpfel sind Nüsse|0|Die Tomate ist botanisch eine Frucht.
-1|Welche Aussage stimmt?|Schall ist im Vakuum schneller|Licht kann sich im Vakuum ausbreiten|Vakuum enthält viel Luft|Eis ist heißer als Feuer|1|Licht braucht kein Medium; Schall dagegen schon.
-1|Welche Aussage ist wahr?|Wale atmen mit Kiemen|Wale müssen zum Atmen auftauchen|Wale sind Fische|Wale legen Eier|1|Wale sind Säugetiere mit Lungen.
-1|Was ist richtig?|Im Weltall herrscht grundsätzlich überall absolute Schwerelosigkeit|Die Erde umkreist die Sonne|Die Sonne umkreist die Erde einmal täglich|Der Mond ist ein Planet|1|Die Erde umkreist die Sonne ungefähr einmal im Jahr.
-1|Welche Aussage ist wahr?|Bienen haben sechs Beine|Bienen haben acht Beine|Bienen haben zwei Beine|Bienen haben keine Beine|0|Bienen sind Insekten mit sechs Beinen.
-1|Was ist wahr?|Ein Regenbogen entsteht durch Lichtbrechung und Reflexion|Ein Regenbogen ist aus Zucker|Es gibt nachts keine Farben|Wolken bestehen aus Watte|0|Licht wird in Wassertropfen gebrochen und reflektiert.
-1|Welche Aussage über Hunde stimmt?|Hunde hören nur schwarzweiß|Hunde können hohe Töne hören|Hunde haben keine Nase|Alle Hunde bellen gleich|1|Hunde nehmen auch hohe Frequenzen wahr.
-2|Welche dieser Aussagen stimmt?|Koalas sind Bären|Koalas sind Beuteltiere|Koalas sind Reptilien|Koalas sind Nagetiere|1|Koalas gehören zu den Beuteltieren.
-2|Was stimmt?|Erdbeeren sind botanisch echte Beeren|Bananen sind botanisch Beeren|Äpfel sind Beeren|Kirschen sind Nüsse|1|Botanische Definitionen machen Obstsalat kompliziert.
-2|Welche Aussage über Gewitter ist wahr?|Blitz ist immer lautlos|Donner entsteht durch rasch erhitzte Luft|Blitze sind aus Glas|Donner kommt von Wolkenschubsen|1|Der Blitz erhitzt Luft schlagartig; das erzeugt eine Druckwelle.
-2|Was ist wahr?|Eisbären haben unter ihrem Fell schwarze Haut|Eisbärenfell ist immer schwarz|Eisbären leben mit Pinguinen in freier Wildbahn|Eisbären fressen nur Pflanzen|0|Unter dem hell erscheinenden Fell haben Eisbären schwarze Haut.
-2|Welche Behauptung stimmt?|Tintenfische haben blaues Blut|Menschen haben grünes Blut|Pferde haben farbloses Blut|Haie haben goldene Knochen|0|Bei vielen Kopffüßern sorgt kupferhaltiges Hämocyanin für blaues Blut.
-2|Welche Aussage stimmt?|Schnecken haben grundsätzlich keine Zähne|Viele Schnecken besitzen eine Raspelzunge|Schnecken bestehen aus Metall|Schnecken sind Vögel|1|Die Radula ist eine Art Raspelzunge mit vielen kleinen Zähnchen.
-2|Welche Aussage ist richtig?|Ein Tag auf der Venus ist länger als ihr Jahr|Die Venus hat 24 Monde|Die Venus ist eine Eisscheibe|Die Venus hat keine Atmosphäre|0|Eine Venusrotation dauert etwa 243 Erdtage; der Umlauf etwa 225.
-2|Welche Aussage ist wahr?|Blut ist in menschlichen Adern blau|Menschliches Blut ist auch ohne Sauerstoff rot|Blut ist in Adern durchsichtig|Blut besteht nur aus Wasser|1|Sauerstoffarmes Blut ist dunkelrot, nicht blau.
-2|Welche Aussage stimmt?|Der Eiffelturm steht in Berlin|Der Eiffelturm wurde 1889 eröffnet|Der Eiffelturm ist aus Holz|Der Eiffelturm ist 1 km hoch|1|Der Eiffelturm wurde für die Weltausstellung 1889 errichtet.
-2|Was stimmt?|Jeder Stern ist ein Planet|Unsere Sonne ist ein Stern|Die Sonne ist ein Mond|Sterne bestehen aus Eiswürfeln|1|Die Sonne ist ein gewöhnlicher Stern unserer Galaxie.
-3|Welche Aussage trifft zu?|Ein Liter Wasser wiegt bei jeder Temperatur exakt 1 kg|Wasser erreicht seine höchste Dichte bei rund 4 °C|Eis ist dichter als Wasser|Wasser verdampft nur über 100 °C|1|Wasser hat bei etwa 4 °C seine größte Dichte.
-3|Was stimmt?|Die Antarktis ist eine Wüste|Die Sahara ist eine Eiswüste|Wüsten sind immer heiß|Regenwald ist die trockenste Landschaft|0|Wüsten werden unter anderem anhand geringer Niederschläge definiert.
-3|Welche Aussage ist korrekt?|Tardigraden heißen auch Bärtierchen|Bärtierchen sind winzige Bären|Bärtierchen sind Vögel|Bärtierchen leben nur in Wüsten|0|Bärtierchen sind mikroskopisch kleine wirbellose Tiere.
-3|Welcher Satz stimmt?|Venus ist der heißeste Planet unseres Sonnensystems|Merkur ist der heißeste Planet|Neptun ist der heißeste Planet|Erde ist der heißeste Planet|0|Die dichte Venusatmosphäre erzeugt einen starken Treibhauseffekt.
-`);
-
-  add('🧩 Logik & Denkfallen', `
-1|Wie viel ist 7 × 8?|54|56|64|58|1|7 mal 8 = 56. Hoffentlich ist die Tafel nicht zu weit weg.
-1|Wenn heute Montag ist, welcher Tag ist übermorgen?|Dienstag|Mittwoch|Donnerstag|Sonntag|1|Übermorgen ist Mittwoch.
-1|Welche Zahl setzt die Reihe fort: 2, 4, 6, 8, ...?|9|10|11|12|1|Immer plus 2.
-1|Wie viele Ecken haben drei Dreiecke zusammen?|6|9|12|15|1|Jedes Dreieck hat drei Ecken.
-1|Was ist die Hälfte von 50?|15|20|25|30|2|50 geteilt durch 2 = 25.
-1|Wie viele Monate haben genau 30 Tage?|3|4|5|6|1|April, Juni, September und November.
-1|Welcher Buchstabe folgt: A, C, E, G, ...?|H|I|J|K|1|Es wird jeweils ein Buchstabe übersprungen.
-1|Eine Pizza wird in acht gleich große Stücke geteilt. Du isst zwei. Welcher Anteil ist weg?|1/8|1/4|1/3|1/2|1|Zwei von acht = ein Viertel.
-1|Du wirfst eine faire Münze. Was ist die Chance auf Kopf?|25 %|50 %|75 %|100 %|1|Bei einer fairen Münze sind beide Seiten gleich wahrscheinlich.
-1|Wie viele Nullen hat eine Million?|4|5|6|7|2|1.000.000 hat sechs Nullen.
-2|Drei Personen teilen zwölf Brezeln gerecht. Wie viele bekommt jede?|3|4|5|6|1|12 geteilt durch 3 = 4.
-2|Welche Zahl ist ein Vielfaches von 9?|28|36|46|52|1|9 mal 4 = 36.
-2|Ein Zug fährt 60 km/h. Wie weit kommt er in 30 Minuten?|15 km|30 km|45 km|60 km|1|Eine halbe Stunde bei 60 km/h ergibt 30 km.
-2|Was ist 20 % von 150?|20|25|30|35|2|0,2 mal 150 = 30.
-2|Welcher Wert ist am größten?|0,7|2/3|65 %|0,69|0|0,7 entspricht 70 % und ist am größten.
-2|Welche Zahl ist durch 3 teilbar?|101|112|123|134|2|1+2+3=6, also ist 123 durch 3 teilbar.
-2|Ein Rechteck ist 4 m lang und 3 m breit. Wie groß ist die Fläche?|7 m²|10 m²|12 m²|14 m²|2|4 mal 3 = 12 Quadratmeter.
-2|Du bekommst 20 % Rabatt auf 50 Euro. Was bezahlst du?|30 Euro|35 Euro|40 Euro|45 Euro|2|10 Euro Rabatt bleiben 40 Euro.
-2|Welche Zahl fehlt: 1, 1, 2, 3, 5, ...?|6|7|8|9|2|Die Fibonacci-Reihe addiert jeweils die zwei vorherigen Zahlen.
-2|Was ist die Quadratwurzel aus 144?|10|11|12|14|2|12 mal 12 = 144.
-3|Fünf Maschinen brauchen fünf Minuten für fünf Teile. Wie lange brauchen 100 solche Maschinen für 100 Teile?|5 Minuten|20 Minuten|100 Minuten|500 Minuten|0|Jede Maschine fertigt in fünf Minuten ein Teil.
-3|Eine Zahl wird verdoppelt und dann um 6 erhöht. Ergebnis: 20. Welche Zahl war es?|6|7|8|9|1|2 × 7 + 6 = 20.
-3|Was ist 2 hoch 5?|16|25|32|64|2|2 × 2 × 2 × 2 × 2 = 32.
-3|Zwei Würfel zeigen jeweils eine Sechs mit Wahrscheinlichkeit 1/6. Wie wahrscheinlich sind zwei Sechsen?|1/6|1/12|1/36|1/18|2|Bei unabhängigen Würfen: 1/6 mal 1/6 = 1/36.
-`);
-
-  add('🎬 Popkultur & Alltag', `
-1|Welcher Klempner ist für seine rote Mütze bekannt?|Sonic|Mario|Pikachu|Shrek|1|Mario hat wohl das bekannteste Klempner-Outfit der Spielegeschichte.
-1|In welcher Filmreihe gibt es einen Ring, der „sie alle knechtet“?|Star Wars|Der Herr der Ringe|Indiana Jones|Toy Story|1|Der Eine Ring aus Mittelerde.
-1|Welche Figur wohnt in einer Ananas ganz tief im Meer?|SpongeBob|Shrek|Batman|Winnie Puuh|0|SpongeBob Schwammkopf. Ananas mit Meerblick.
-1|Welches Tier ist „Simba“?|Löwe|Tiger|Bär|Wolf|0|Simba ist der Löwenjunge aus Der König der Löwen.
-1|Was ist eine „Selfie“?|Selbst aufgenommenes Foto|Ein Fahrradschloss|Ein Gemüse|Ein Sofakissen|0|Selfie bedeutet meist ein Selbstporträtfoto.
-1|Welche Farbe hat die klassische Coca-Cola-Markenkennzeichnung?|Blau|Rot|Grün|Lila|1|Coca-Cola verwendet seit langem markantes Rot.
-1|Welche Sportart spielt man mit einem Puck?|Basketball|Eishockey|Tennis|Golf|1|Der Puck saust beim Eishockey übers Eis.
-1|Wie heißt das Haus von Harry Potter in Hogwarts?|Slytherin|Hufflepuff|Gryffindor|Ravenclaw|2|Harry wird Gryffindor zugeteilt.
-1|In welcher Sportart gibt es einen Elfmeter?|Fußball|Tischtennis|Schach|Volleyball|0|Elf Meter, ein Ball, viele Nerven.
-1|Was gehört zu einer klassischen Pizza Margherita?|Tomate, Mozzarella und Basilikum|Ananas, Schokolade und Gurke|Nur Pommes|Nur Senf|0|Tomate, Mozzarella und Basilikum sind typisch.
-2|Welche Band veröffentlichte „Bohemian Rhapsody“?|ABBA|Queen|Coldplay|The Beatles|1|Queen. Jetzt bitte nicht sieben Minuten lang mitsingen.
-2|Was ist bei „Mario Kart“ ein typischer Gegenstand?|Blaue Panzer|Echte Autoreifen|Löffel|Haarbürsten|0|Die blauen Panzer ruinieren zuverlässig Familienfreundschaften.
-2|Welche Filmfigur trägt häufig einen Hut und eine Peitsche?|Indiana Jones|Darth Vader|Homer Simpson|E.T.|0|Indiana Jones lebt gefährlich und trägt dennoch Hut.
-2|In welcher Serie wohnt Homer Simpson?|South Park|Die Simpsons|Friends|Breaking Bad|1|Homer ist in Springfield zuhause.
-2|Was bedeutet „AFK“ in Gaming-Chats?|Away From Keyboard|All Fast Karts|Always Friendly King|Another Free Key|0|AFK heißt sinngemäß: gerade nicht am Rechner.
-2|Was heißt „DIY“?|Do It Yourself|Dance In Yellow|Drink It Yesterday|Digital Internet Yoga|0|DIY bedeutet selber machen.
-2|Welches Spiel verwendet hauptsächlich quadratische Blöcke?|Minecraft|Ein Drache auf Skiern|Candy Crush|FIFA|1|Minecraft besteht aus einer Welt voller Blöcke.
-2|Welche Band ist für „Dancing Queen“ bekannt?|ABBA|Rammstein|Metallica|Nirvana|0|ABBA. Die Tanzfläche gehört jetzt der Familie.
-2|Wobei spielt ein „Keeper“ eine typische Rolle?|Fußball|Tischtennis-Doppel|Weitsprung|Boule|0|Keeper ist umgangssprachlich ein Torwart.
-2|Was ist ein „Meme“ im Internet meistens?|Ein verbreitetes witziges Bild oder Format|Ein Motoröl|Ein Braukessel|Ein Hundehalsband|0|Memes sind wiedererkennbare und oft variierte Internetinhalte.
-3|Wie heißt die Währung im Videospiel Super Mario meist?|Ringe|Münzen|Rubine|Kronkorken|1|Mario sammelt Münzen, Sonic dagegen Ringe.
-3|Welcher Film spielt großteils auf einem Luxusdampfer, der 1912 sank?|Titanic|Avatar|Gladiator|Inception|0|Titanic von 1997 erzählt eine Geschichte an Bord der RMS Titanic.
-3|Welches dieser Spiele hat eine „Enderdrache“-Bossfigur?|Minecraft|Tetris|Wii Sports|Rocket League|0|Der Enderdrache wartet in Minecraft im Ende.
-3|Wie heißt der Hobbit, der den Einen Ring nach Mordor tragen soll?|Bilbo Beutlin|Frodo Beutlin|Samweis Gamdschie|Peregrin Tuk|1|Frodo erhält die Aufgabe, den Ring zu vernichten.
-`);
-
+  'use strict';
+  const CLASSIC_QUESTIONS = [
+  {
+    "level": 1,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welche Zutat macht ein klassisches Pils vor allem bitter?",
+    "options": [
+      "Hopfen",
+      "Hefe",
+      "Salz",
+      "Gerstenstroh"
+    ],
+    "correct": 0,
+    "explanation": "Hopfen liefert die typische Bittere. Salz macht höchstens den Brezelkorb interessanter."
+  },
+  {
+    "level": 1,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Wie viele Herzen hat ein Oktopus?",
+    "options": [
+      "Eins",
+      "Acht",
+      "Zwei",
+      "Drei"
+    ],
+    "correct": 3,
+    "explanation": "Drei Herzen. Der Oktopus ist damit emotional besser ausgestattet als unsere Familiengruppe."
+  },
+  {
+    "level": 1,
+    "category": "Allgemeinwissen",
+    "difficulty": 1,
+    "text": "In welchem Land liegt die Stadt Porto?",
+    "options": [
+      "Portugal",
+      "Italien",
+      "Spanien",
+      "Griechenland"
+    ],
+    "correct": 0,
+    "explanation": "Portugal. Porto klingt nicht nur wie ein Getränk, die Stadt gibt auch dem Portwein seinen Namen."
+  },
+  {
+    "level": 1,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was beschreibt ein „Helles“ in erster Linie?",
+    "options": [
+      "Einen hellen Bierstil",
+      "Ein Bier unter 1 Prozent Alkohol",
+      "Bier nur für den Vormittag",
+      "Bier ohne Kohlensäure"
+    ],
+    "correct": 0,
+    "explanation": "Helles bezeichnet einen hellen Bierstil, nicht den Geisteszustand nach der dritten Runde."
+  },
+  {
+    "level": 1,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Warum sind Flamingos typischerweise rosa?",
+    "options": [
+      "Wegen des Salzgehalts der Luft",
+      "Wegen rosa Sonnenlicht",
+      "Weil sie erröten",
+      "Farbstoffe aus der Nahrung"
+    ],
+    "correct": 3,
+    "explanation": "Carotinoide aus Algen und Krebstieren färben das Gefieder. Flamingos betreiben Ernährungstuning."
+  },
+  {
+    "level": 1,
+    "category": "Kneipenwissen",
+    "difficulty": 1,
+    "text": "Aus welchem Land stammt das Oktoberfest ursprünglich?",
+    "options": [
+      "Schweiz",
+      "Deutschland",
+      "Tschechien",
+      "Österreich"
+    ],
+    "correct": 1,
+    "explanation": "1810 wurde in München gefeiert. Die Diskussion um den Preis der Maß folgte vermutlich kurz darauf."
+  },
+  {
+    "level": 1,
+    "category": "Geografie & Alltag",
+    "difficulty": 1,
+    "text": "Was bedeutet die Abkürzung „GPS“?",
+    "options": [
+      "Geographic Party Signal",
+      "General Pub Service",
+      "Global Pizza Search",
+      "Global Positioning System"
+    ],
+    "correct": 3,
+    "explanation": "GPS navigiert dich zur Adresse, nicht automatisch wieder aus dem Biergarten."
+  },
+  {
+    "level": 1,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Was ist ein Axolotl?",
+    "options": [
+      "Ein ausgestorbener Dinosaurier",
+      "Ein tropischer Käfer",
+      "Ein japanischer Reisbrand",
+      "Ein mexikanischer Schwanzlurch"
+    ],
+    "correct": 3,
+    "explanation": "Der Axolotl ist ein Salamander, der in der Natur meistens im Larvenstadium bleibt."
+  },
+  {
+    "level": 1,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Wofür steht IPA auf einem Bieretikett?",
+    "options": [
+      "International Pils Association",
+      "Irish Pub Alcohol",
+      "India Pale Ale",
+      "Imperial Party Ale"
+    ],
+    "correct": 2,
+    "explanation": "India Pale Ale. Die Abkürzung ist kein geheimes WLAN-Passwort der Brauerei."
+  },
+  {
+    "level": 1,
+    "category": "Allgemeinwissen",
+    "difficulty": 1,
+    "text": "Welches dieser Tiere ist ein Säugetier?",
+    "options": [
+      "Pinguin",
+      "Fledermaus",
+      "Krokodil",
+      "Forelle"
+    ],
+    "correct": 1,
+    "explanation": "Fledermäuse sind Säugetiere und können aktiv fliegen. Pinguine verzichten großzügig darauf."
+  },
+  {
+    "level": 1,
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "Was wird beim Abtrocknen anderer Dinge selbst nass?",
+    "options": [
+      "Ein Bierdeckel",
+      "Ein Kühlschrank",
+      "Ein Stein",
+      "Ein Handtuch"
+    ],
+    "correct": 3,
+    "explanation": "Das Handtuch. Es arbeitet sich quasi in seinen eigenen Untergang."
+  },
+  {
+    "level": 1,
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Welche Farbe hat die Flugschreiber-„Black Box“ normalerweise?",
+    "options": [
+      "Grasgrün",
+      "Unsichtbar",
+      "Leuchtendes Orange",
+      "Tiefschwarz"
+    ],
+    "correct": 2,
+    "explanation": "Orange erleichtert die Suche. „Black Box“ ist marketingtechnisch etwas irreführend."
+  },
+  {
+    "level": 2,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welches dieser Biere wird klassisch obergärig gebraut?",
+    "options": [
+      "Helles",
+      "Kölsch",
+      "Märzen",
+      "Pils"
+    ],
+    "correct": 1,
+    "explanation": "Kölsch ist obergärig. Die Kölner nehmen es übrigens sehr persönlich, wenn man das verwechselt."
+  },
+  {
+    "level": 2,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welches Tier kann mit den Füßen schmecken?",
+    "options": [
+      "Frosch",
+      "Pinguin",
+      "Schmetterling",
+      "Goldfisch"
+    ],
+    "correct": 2,
+    "explanation": "Schmetterlinge haben Geschmacksrezeptoren an den Füßen. Ein Spaziergang über Pommes wäre spannend."
+  },
+  {
+    "level": 2,
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "In welcher Stadt wurde das bayerische Reinheitsgebot von 1516 verkündet?",
+    "options": [
+      "Ingolstadt",
+      "Bamberg",
+      "Nürnberg",
+      "München"
+    ],
+    "correct": 0,
+    "explanation": "Ingolstadt. Nicht München. Das ist für einige Stammtische schon eine Zumutung."
+  },
+  {
+    "level": 2,
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was gilt botanisch als Beere?",
+    "options": [
+      "Erdbeere",
+      "Banane",
+      "Himbeere",
+      "Brombeere"
+    ],
+    "correct": 1,
+    "explanation": "Die Banane gilt botanisch als Beere. Die Erdbeere dagegen nicht. Die Natur trollt uns."
+  },
+  {
+    "level": 2,
+    "category": "Geografie & Alltag",
+    "difficulty": 1,
+    "text": "Welche Stadt ist die Hauptstadt Kanadas?",
+    "options": [
+      "Ottawa",
+      "Toronto",
+      "Montreal",
+      "Vancouver"
+    ],
+    "correct": 0,
+    "explanation": "Ottawa. Toronto hat die Größe, Ottawa den Amtstitel."
+  },
+  {
+    "level": 2,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was bedeutet „Lager“ bei Bier ursprünglich?",
+    "options": [
+      "Es ist nur für Lastwagenfahrer",
+      "Es enthält weniger Alkohol",
+      "Es wird immer aus Roggen gebraut",
+      "Es wurde gelagert"
+    ],
+    "correct": 3,
+    "explanation": "Der Begriff kommt vom Lagern, insbesondere kühl. Es liegt also an der Aufbewahrung, nicht am Bierbauch."
+  },
+  {
+    "level": 2,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Bei welchem Tier trägt das Männchen die Jungen aus?",
+    "options": [
+      "Flamingo",
+      "Eichhörnchen",
+      "Pinguin",
+      "Seepferdchen"
+    ],
+    "correct": 3,
+    "explanation": "Beim Seepferdchen trägt das Männchen die Embryonen im Brutbeutel aus. Familienplanung auf Expertenniveau."
+  },
+  {
+    "level": 2,
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welcher dieser Gegenstände wurde zuerst erfunden?",
+    "options": [
+      "Buchdruck mit beweglichen Lettern in Europa",
+      "Telefon",
+      "Mikrowelle",
+      "Glühbirne"
+    ],
+    "correct": 0,
+    "explanation": "Gutenbergs Drucktechnik stammt aus dem 15. Jahrhundert. Der Anruf beim Drucker musste noch warten."
+  },
+  {
+    "level": 2,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Wie nennt man die feste Masse, die nach dem Läutern des Malzes zurückbleibt?",
+    "options": [
+      "Treber",
+      "Würzebrot",
+      "Hefewatte",
+      "Schaumfänger"
+    ],
+    "correct": 0,
+    "explanation": "Treber ist der Rückstand aus den festen Malzbestandteilen. Kein beleidigender Spitzname für den Braumeister."
+  },
+  {
+    "level": 2,
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was misst ein Barometer?",
+    "options": [
+      "Temperatur",
+      "Laune",
+      "Luftdruck",
+      "Alkoholgehalt"
+    ],
+    "correct": 2,
+    "explanation": "Luftdruck. Für schlechte Stimmung in der Familie gibt es leider kein normiertes Messgerät."
+  },
+  {
+    "level": 2,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welcher Vogel kann auf der Stelle in der Luft schweben und rückwärts fliegen?",
+    "options": [
+      "Kolibri",
+      "Pinguin",
+      "Albatros",
+      "Strauß"
+    ],
+    "correct": 0,
+    "explanation": "Kolibris sind wendige Flugkünstler. Der Strauß hat sich höflich abgemeldet."
+  },
+  {
+    "level": 2,
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "Was kommt einmal in „Bier“, aber zweimal in „Bierbar“ vor?",
+    "options": [
+      "Der Buchstabe E",
+      "Ein Kater",
+      "Der Buchstabe B",
+      "Der Buchstabe I"
+    ],
+    "correct": 2,
+    "explanation": "Im Wort Bierbar steht B zweimal, in Bier einmal. Sprachforschung mit Zapfanlage."
+  },
+  {
+    "level": 3,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welche Zutat fehlte ausdrücklich im ursprünglichen Reinheitsgebot von 1516?",
+    "options": [
+      "Wasser",
+      "Gerste",
+      "Hopfen",
+      "Hefe"
+    ],
+    "correct": 3,
+    "explanation": "Im Wortlaut standen Gerste, Hopfen und Wasser. Hefe war zwar beteiligt, galt aber noch nicht als eigene Zutat."
+  },
+  {
+    "level": 3,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welche Form haben die Hinterlassenschaften von Wombats häufig?",
+    "options": [
+      "Spiralen",
+      "Perfekte Kugeln",
+      "Würfel",
+      "Sterne"
+    ],
+    "correct": 2,
+    "explanation": "Wombats scheiden tatsächlich würfelähnlichen Kot aus. Sogar der Darm kann Geometrie."
+  },
+  {
+    "level": 3,
+    "category": "Geografie",
+    "difficulty": 1,
+    "text": "Was ist flächenmäßig die größte Wüste der Erde?",
+    "options": [
+      "Gobi",
+      "Antarktische Wüste",
+      "Sahara",
+      "Atacama"
+    ],
+    "correct": 1,
+    "explanation": "Die Antarktis ist eine Kältewüste. „Wüste“ bedeutet nicht automatisch Badelatschenwetter."
+  },
+  {
+    "level": 3,
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welche Epoche kam in Europa zuerst?",
+    "options": [
+      "Industrialisierung",
+      "Aufklärung",
+      "Renaissance",
+      "Mittelalter"
+    ],
+    "correct": 3,
+    "explanation": "Das Mittelalter begann weit vor der Renaissance. Die Streamingdienste kamen noch etwas später."
+  },
+  {
+    "level": 3,
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Welcher Stoff sorgt bei Zwiebeln vor allem für tränende Augen?",
+    "options": [
+      "Reiner Alkohol",
+      "Salzstaub",
+      "Reizendes schwefelhaltiges Gas",
+      "Kohlendioxid"
+    ],
+    "correct": 2,
+    "explanation": "Beim Schneiden entsteht ein flüchtiger schwefelhaltiger Reizstoff. Die Zwiebel gewinnt jedes Drama."
+  },
+  {
+    "level": 3,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "In welcher Stadt wurde der erste Pilsner-Urquell-Sud 1842 gebraut?",
+    "options": [
+      "Dresden",
+      "Pilsen",
+      "Prag",
+      "Wien"
+    ],
+    "correct": 1,
+    "explanation": "Das goldene Pilsner-Bier hat seinen Ursprung im böhmischen Pilsen. Der Name war ein ziemlich guter Tipp."
+  },
+  {
+    "level": 3,
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Was haben Haie bereits getan, bevor es die ersten Bäume gab?",
+    "options": [
+      "Sie bauten Nester in Bäumen",
+      "Sie züchteten Menschen",
+      "Sie schwammen schon in den Meeren",
+      "Sie verschwanden komplett"
+    ],
+    "correct": 2,
+    "explanation": "Haie entstanden lange vor den ersten Bäumen. Ein Hai sieht heute also ziemlich viele neue Gesichter."
+  },
+  {
+    "level": 3,
+    "category": "Geografie",
+    "difficulty": 1,
+    "text": "Zu welchem Land gehören die Kanarischen Inseln politisch?",
+    "options": [
+      "Frankreich",
+      "Marokko",
+      "Portugal",
+      "Spanien"
+    ],
+    "correct": 3,
+    "explanation": "Die Kanaren gehören zu Spanien und liegen vor der nordwestafrikanischen Küste. Europäische Politik, afrikanischer Atlantik."
+  },
+  {
+    "level": 3,
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was ist auf dem Mond wegen der geringen Schwerkraft anders?",
+    "options": [
+      "Man verliert die Körpermasse",
+      "Man wiegt dort weniger",
+      "Ein Tag dauert eine Stunde",
+      "Luft ist dichter"
+    ],
+    "correct": 1,
+    "explanation": "Die Gewichtskraft ist geringer, die Masse bleibt gleich. Das ist die freundlichste Waage im Sonnensystem."
+  },
+  {
+    "level": 3,
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Wofür steht die Einheit IBU bei Bier?",
+    "options": [
+      "Bierschaumhöhe",
+      "Alkoholprozent",
+      "Zapftemperatur",
+      "Bittereeinheiten"
+    ],
+    "correct": 3,
+    "explanation": "International Bitterness Units. Weniger ein Geschmacksurteil als eine technische Bittere-Kennzahl."
+  },
+  {
+    "level": 3,
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welches dieser Ereignisse fand zuletzt statt?",
+    "options": [
+      "Erste Mondlandung",
+      "Erfindung des Buchdrucks",
+      "Entdeckung Amerikas durch Kolumbus 1492",
+      "Französische Revolution"
+    ],
+    "correct": 0,
+    "explanation": "1969 landeten erstmals Menschen auf dem Mond. Das Bier aus der Kantine ist nicht dokumentiert."
+  },
+  {
+    "level": 3,
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "Ein Hahn legt auf einem Dach ein Ei. Wohin rollt es?",
+    "options": [
+      "Zur Dachrinne",
+      "Nirgendwo, Hähne legen keine Eier",
+      "Rechts",
+      "Links"
+    ],
+    "correct": 1,
+    "explanation": "Hähne legen keine Eier. Wenn doch, bitte erst Wissenschaftler und dann die Nachbarn rufen."
+  },
+  {
+    "level": 4,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Welcher Bierstil ist besonders mit Bamberg und geräuchertem Malz verbunden?",
+    "options": [
+      "Saison",
+      "Porter",
+      "Milkshake IPA",
+      "Rauchbier"
+    ],
+    "correct": 3,
+    "explanation": "Bamberger Rauchbier erhält das Raucharoma aus geräuchertem Malz. Frühstücksschinken im Glas ist nicht nötig."
+  },
+  {
+    "level": 4,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Welcher Stoff färbt das Blut vieler Oktopusse blau?",
+    "options": [
+      "Chlorophyll",
+      "Goldstaub",
+      "Mikroplastik",
+      "Hämocyanin mit Kupfer"
+    ],
+    "correct": 3,
+    "explanation": "Der kupferhaltige Sauerstofftransportstoff Hämocyanin macht es blau. Adel im Ozean."
+  },
+  {
+    "level": 4,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Was ist an Erdnüssen botanisch bemerkenswert?",
+    "options": [
+      "Sie wachsen ausschließlich auf Bäumen",
+      "Sie sind Pilze",
+      "Sie sind Hülsenfrüchte",
+      "Sie enthalten keine Proteine"
+    ],
+    "correct": 2,
+    "explanation": "Erdnüsse sind Hülsenfrüchte. Botanisch ist das eine Identitätskrise im Snackregal."
+  },
+  {
+    "level": 4,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Welches Land schenkte den USA die Freiheitsstatue?",
+    "options": [
+      "Italien",
+      "Kanada",
+      "England",
+      "Frankreich"
+    ],
+    "correct": 3,
+    "explanation": "Die Freiheitsstatue war ein Geschenk aus Frankreich. Ein stattlicher Souvenirartikel."
+  },
+  {
+    "level": 4,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Welcher deutsche Bierstil wird traditionell mit Düsseldorf verbunden?",
+    "options": [
+      "Berliner Weisse",
+      "Altbier",
+      "Kölsch",
+      "Rauchbier"
+    ],
+    "correct": 1,
+    "explanation": "Düsseldorfer Altbier ist obergärig. In Köln bestellt man es besser sehr vorsichtig."
+  },
+  {
+    "level": 4,
+    "category": "Geografie",
+    "difficulty": 2,
+    "text": "Welcher Kontinent hat die meisten Länder?",
+    "options": [
+      "Südamerika",
+      "Europa",
+      "Australien",
+      "Afrika"
+    ],
+    "correct": 3,
+    "explanation": "Afrika hat 54 international weithin anerkannte Staaten. Das ist mehr als jeder andere Kontinent."
+  },
+  {
+    "level": 4,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Was wird im Höcker eines Kamels hauptsächlich gespeichert?",
+    "options": [
+      "Sand",
+      "Wasser in einer Blase",
+      "Fett",
+      "Milch"
+    ],
+    "correct": 2,
+    "explanation": "Kamelhöcker speichern Fettreserven, keine Wassertanks. Das ist die enttäuschendste Nachricht für durstige Kamele."
+  },
+  {
+    "level": 4,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Was beschreibt „Petrichor“?",
+    "options": [
+      "Geruch nach Regen auf trockenem Boden",
+      "Einen Geruch im Kühlschrank",
+      "Angst vor Tieren",
+      "Die Form von Schneeflocken"
+    ],
+    "correct": 0,
+    "explanation": "Petrichor heißt der charakteristische Duft nach Regen auf trockenem Boden. Poetischer als „nasses Pflaster“."
+  },
+  {
+    "level": 4,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Was wurde früher gebaut?",
+    "options": [
+      "Kolosseum in Rom",
+      "Empire State Building",
+      "Eiffelturm",
+      "Brandenburger Tor"
+    ],
+    "correct": 0,
+    "explanation": "Das Kolosseum stammt aus dem 1. Jahrhundert n. Chr. Das ist ein ziemlich alter Veranstaltungsort."
+  },
+  {
+    "level": 4,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Was macht „Dry Hopping“ mit Bier besonders?",
+    "options": [
+      "Es entfernt sämtliches Wasser",
+      "Es ersetzt das Malz",
+      "Es tötet jede Hefe",
+      "Es verstärkt oft das Hopfenaroma"
+    ],
+    "correct": 3,
+    "explanation": "Bei Kalthopfung wird Hopfen während oder nach der Gärung zugesetzt, um Aromen zu betonen."
+  },
+  {
+    "level": 4,
+    "category": "Völlig bescheuert",
+    "difficulty": 2,
+    "text": "Was davon ist streng genommen kein Palindrom?",
+    "options": [
+      "Otto",
+      "Rentner",
+      "Bier",
+      "Lagerregal"
+    ],
+    "correct": 2,
+    "explanation": "„Bier“ liest sich rückwärts anders. „Lagerregal“ hingegen ist die Superkraft jedes Hobbybrauers."
+  },
+  {
+    "level": 4,
+    "category": "Weltwissen",
+    "difficulty": 2,
+    "text": "Welcher Planet hat keine natürlichen Monde?",
+    "options": [
+      "Jupiter",
+      "Venus",
+      "Mars",
+      "Neptun"
+    ],
+    "correct": 1,
+    "explanation": "Venus hat keinen Mond. Merkur übrigens auch – der ist bloß nicht in den Antworten."
+  },
+  {
+    "level": 5,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Was ist „Gruit“ historisch beim Bierbrauen?",
+    "options": [
+      "Ein spezieller Kronkorken",
+      "Eine Kräutermischung als Würzmittel",
+      "Ein Brauereisteuerformular",
+      "Eine Zapftechnik"
+    ],
+    "correct": 1,
+    "explanation": "Gruit war eine Kräuterwürze für Bier, bevor Hopfen dominierte. Mittelalterliches Craft Beer."
+  },
+  {
+    "level": 5,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Womit sind Pangolinschuppen hauptsächlich vergleichbar?",
+    "options": [
+      "Mit Kalkstein",
+      "Mit Porzellan",
+      "Mit Fischgräten",
+      "Mit Fingernägeln aus Keratin"
+    ],
+    "correct": 3,
+    "explanation": "Pangolinschuppen bestehen aus Keratin – dem Stoff deiner Fingernägel. Tierische Rüstung aus Nagelmaterial."
+  },
+  {
+    "level": 5,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Welcher berühmte Herrscher starb auf der Insel St. Helena?",
+    "options": [
+      "Julius Caesar",
+      "Alexander der Große",
+      "Napoleon Bonaparte",
+      "Karl der Große"
+    ],
+    "correct": 2,
+    "explanation": "Napoleon starb 1821 auf St. Helena. Der Inselurlaub war nicht freiwillig."
+  },
+  {
+    "level": 5,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Warum steigt warme Luft in einem Raum häufig auf?",
+    "options": [
+      "Sie wiegt grundsätzlich nichts",
+      "Sie ist stärker magnetisch",
+      "Weil die Schwerkraft oben schwächer ist",
+      "Sie ist bei gleichem Druck weniger dicht"
+    ],
+    "correct": 3,
+    "explanation": "Erwärmte Luft dehnt sich aus und hat eine geringere Dichte. Die Decke bekommt die warme Portion."
+  },
+  {
+    "level": 5,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Was beschreibt „Stammwürze“ beim Brauen?",
+    "options": [
+      "Die Zahl der Kohlensäureblasen",
+      "Den aktuellen Alkoholgehalt",
+      "Die Temperatur beim Zapfen",
+      "Gelöste Stoffe in der Würze vor der Gärung"
+    ],
+    "correct": 3,
+    "explanation": "Stammwürze ist kein Beweis, dass ein Braumeister von einem Stamm abstammt."
+  },
+  {
+    "level": 5,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Welches Tier besitzt einen giftigen Sporn an den Hinterbeinen, zumindest als Männchen?",
+    "options": [
+      "Wombat",
+      "Känguru",
+      "Schnabeltier",
+      "Koala"
+    ],
+    "correct": 2,
+    "explanation": "Männliche Schnabeltiere besitzen giftige Sporne. Auch Kuscheltiere können schlechte Laune haben."
+  },
+  {
+    "level": 5,
+    "category": "Geografie",
+    "difficulty": 2,
+    "text": "Welche Meerenge trennt Europa und Afrika am westlichen Mittelmeer?",
+    "options": [
+      "Straße von Gibraltar",
+      "Bosporus",
+      "Straße von Hormus",
+      "Beringstraße"
+    ],
+    "correct": 0,
+    "explanation": "Gibraltar liegt zwischen Spanien und Marokko. Kein geeigneter Schwimmweg für nach dem Quiz."
+  },
+  {
+    "level": 5,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Was wurde in der Antike auf Papyrus üblicherweise geschrieben?",
+    "options": [
+      "Musik auf Vinyl",
+      "Noten auf Silizium",
+      "Texte mit Tinte",
+      "Digitale QR-Codes"
+    ],
+    "correct": 2,
+    "explanation": "Papyrus war ein wichtiger Schriftträger. Keine Cloud, aber viel Speicherkapazität auf Rollen."
+  },
+  {
+    "level": 5,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Was wird beim „Eisbock“ gezielt teilweise entfernt?",
+    "options": [
+      "Hopfenbittere",
+      "Malzstärke durch Sieben",
+      "Kohlendioxid durch Vakuum",
+      "Gefrorenes Wasser"
+    ],
+    "correct": 3,
+    "explanation": "Durch teilweises Gefrieren und Entfernen von Eis wird das Bier konzentriert. Frost als Trickkiste."
+  },
+  {
+    "level": 5,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Welcher Geschmack wird hauptsächlich mit „Umami“ bezeichnet?",
+    "options": [
+      "Herzhaft-würzig",
+      "Scharf",
+      "Sauer",
+      "Bitter"
+    ],
+    "correct": 0,
+    "explanation": "Umami meint einen herzhaft-würzigen Geschmack. Die fünfte Geschmacksrichtung, die beim Familienessen mitredet."
+  },
+  {
+    "level": 5,
+    "category": "Völlig bescheuert",
+    "difficulty": 2,
+    "text": "Du überholst in einem Rennen die Person auf Platz zwei. Auf welchem Platz bist du?",
+    "options": [
+      "Disqualifiziert wegen Ehrgeiz",
+      "Auf Platz zwei",
+      "Auf Platz eins",
+      "Auf Platz drei"
+    ],
+    "correct": 1,
+    "explanation": "Wer den Zweiten überholt, ist selbst Zweiter. Papa darf den Pokal wieder abstellen."
+  },
+  {
+    "level": 5,
+    "category": "Weltwissen",
+    "difficulty": 2,
+    "text": "Wie heißt die Hauptstadt der Türkei?",
+    "options": [
+      "Izmir",
+      "Istanbul",
+      "Ankara",
+      "Antalya"
+    ],
+    "correct": 2,
+    "explanation": "Ankara ist die Hauptstadt. Istanbul ist größer, aber nicht der Amtssitz."
+  },
+  {
+    "level": 6,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Warum heißt Bockbier historisch vermutlich „Bock“?",
+    "options": [
+      "Wegen der Stadt Einbeck",
+      "Wegen des Rezepts eines Klosters namens Bock",
+      "Wegen der Stärke des Geweihs",
+      "Wegen eines Ziegenopfers"
+    ],
+    "correct": 0,
+    "explanation": "Aus dem Einbecker Bier wurde über Sprachwandlungen „Bockbier“. Die Ziege kam später aufs Etikett."
+  },
+  {
+    "level": 6,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Welche Vögel können sich nachweislich menschliche Gesichter über längere Zeit merken?",
+    "options": [
+      "Krähen",
+      "Flamingos ausschließlich",
+      "Pinguine",
+      "Hühner nur bei Vollmond"
+    ],
+    "correct": 0,
+    "explanation": "Krähen erkennen einzelne Menschen wieder. Freundlich sein zahlt sich also aus."
+  },
+  {
+    "level": 6,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Welche der folgenden Personen lebte zeitlich am frühesten?",
+    "options": [
+      "William Shakespeare",
+      "Napoleon",
+      "Kleopatra VII.",
+      "Jeanne d’Arc"
+    ],
+    "correct": 2,
+    "explanation": "Kleopatra lebte im 1. Jahrhundert v. Chr. Shakespeare hätte sie also nicht persönlich interviewen können."
+  },
+  {
+    "level": 6,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Welche Aussage über einen Tag auf der Venus ist richtig?",
+    "options": [
+      "Eine Eigenrotation dauert länger als ein Sonnenumlauf",
+      "Er dauert exakt 24 Stunden",
+      "Es gibt gar keine Rotation",
+      "Er ist kürzer als auf Merkur"
+    ],
+    "correct": 0,
+    "explanation": "Venus braucht für eine Drehung ungefähr 243 Erdtage, für einen Umlauf um die Sonne 225."
+  },
+  {
+    "level": 6,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Was beschreibt „Lambic“ aus Belgien traditionell besonders?",
+    "options": [
+      "Spontanvergorenes Bier",
+      "Ein Bier ohne Malz",
+      "Bier ausschließlich aus Reis",
+      "Ein Pils mit Limonade"
+    ],
+    "correct": 0,
+    "explanation": "Lambic wird traditionell durch Mikroorganismen aus Umgebung und Brauerei spontan vergoren."
+  },
+  {
+    "level": 6,
+    "category": "Geografie",
+    "difficulty": 2,
+    "text": "Welche Hauptstadt liegt direkt an der Donau?",
+    "options": [
+      "Madrid",
+      "Budapest",
+      "Amsterdam",
+      "Oslo"
+    ],
+    "correct": 1,
+    "explanation": "Die Donau fließt durch Budapest. Das ideale Quizflusskreuzfahrtziel."
+  },
+  {
+    "level": 6,
+    "category": "Tierisch unnütz",
+    "difficulty": 2,
+    "text": "Was ist die Besonderheit der Zähne eines Haies?",
+    "options": [
+      "Haie haben grundsätzlich nur zwei Zähne",
+      "Viele Arten ersetzen Zähne fortlaufend",
+      "Sie fallen nie aus",
+      "Sie bestehen aus Holz"
+    ],
+    "correct": 1,
+    "explanation": "Bei vielen Haiarten werden Zähne laufend nachgebildet. Zahnzusatzversicherung unnötig."
+  },
+  {
+    "level": 6,
+    "category": "Geschichte",
+    "difficulty": 2,
+    "text": "Wie heißt die römische Stadt, die 79 n. Chr. durch den Vesuv verschüttet wurde?",
+    "options": [
+      "Pompeji",
+      "Sparta",
+      "Troja",
+      "Alexandria"
+    ],
+    "correct": 0,
+    "explanation": "Pompeji wurde durch den Vesuvausbruch verschüttet. Die Ascheschicht wurde zur Zeitkapsel."
+  },
+  {
+    "level": 6,
+    "category": "Kuriose Fakten",
+    "difficulty": 2,
+    "text": "Welche dieser Pflanzen ist botanisch näher mit einer Tomate verwandt?",
+    "options": [
+      "Sonnenblume",
+      "Kartoffel",
+      "Erdbeere",
+      "Kokospalme"
+    ],
+    "correct": 1,
+    "explanation": "Tomate und Kartoffel gehören zu den Nachtschattengewächsen. Familientreffen als Pommes mit Ketchup."
+  },
+  {
+    "level": 6,
+    "category": "Bier & Brauen",
+    "difficulty": 2,
+    "text": "Welches Gas kann sich in schlecht belüfteten Gärkellern gefährlich sammeln?",
+    "options": [
+      "Kohlendioxid",
+      "Helium",
+      "Ozon aus dem Malz",
+      "Argon aus dem Hopfen"
+    ],
+    "correct": 0,
+    "explanation": "CO₂ aus der Gärung kann Sauerstoff verdrängen. Der Braumeister braucht also mehr als gute Rezepte."
+  },
+  {
+    "level": 6,
+    "category": "Völlig bescheuert",
+    "difficulty": 2,
+    "text": "Ein Arzt gibt dir drei Tabletten und sagt: alle 30 Minuten eine. Wann ist die letzte dran, wenn du sofort die erste nimmst?",
+    "options": [
+      "Nach 30 Minuten",
+      "Nach 60 Minuten",
+      "Nach drei Stunden",
+      "Nach 90 Minuten"
+    ],
+    "correct": 1,
+    "explanation": "Jetzt, nach 30 und nach 60 Minuten. Zeitrechnung ohne Taschenrechner – versprochen."
+  },
+  {
+    "level": 6,
+    "category": "Weltwissen",
+    "difficulty": 2,
+    "text": "Welches Land nutzt die Währung Forint?",
+    "options": [
+      "Polen",
+      "Tschechien",
+      "Rumänien",
+      "Ungarn"
+    ],
+    "correct": 3,
+    "explanation": "In Ungarn zahlt man mit Forint. Fürint wäre allerdings ein schönes Biermaß."
+  },
+  {
+    "level": 7,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Wodurch entsteht beim Weizenbier häufig das typische Bananenaroma?",
+    "options": [
+      "Durch besonders gelben Hopfen",
+      "Durch von Hefe gebildete Ester",
+      "Durch echte Bananen im Reinheitsgebot",
+      "Durch Bananschalen im Sud"
+    ],
+    "correct": 1,
+    "explanation": "Vor allem Isoamylacetat aus der Hefe sorgt für die Bananennote. Die Banane bleibt im Obstkorb."
+  },
+  {
+    "level": 7,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Welcher Meeressäuger schläft oft mit einer aktiveren Gehirnhälfte?",
+    "options": [
+      "Quallenfisch",
+      "Delfin",
+      "Seestern",
+      "Krake"
+    ],
+    "correct": 1,
+    "explanation": "Delfine können unihemisphärisch schlafen. Eine Hälfte passt auf, die andere macht Feierabend."
+  },
+  {
+    "level": 7,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welcher antike Denker war Lehrer Alexanders des Großen?",
+    "options": [
+      "Aristoteles",
+      "Sokrates",
+      "Epikur",
+      "Platon"
+    ],
+    "correct": 0,
+    "explanation": "Aristoteles unterrichtete Alexander. Nachhilfe mit historischen Folgen."
+  },
+  {
+    "level": 7,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Woraus besteht die weiße „Asche“ auf einem brennenden Räucherstäbchen überwiegend?",
+    "options": [
+      "Aus Zucker",
+      "Aus reinem Kohlenstoff",
+      "Aus gefrorenem Rauch",
+      "Aus anorganischen Rückständen"
+    ],
+    "correct": 3,
+    "explanation": "Asche enthält vor allem unverbrennbare Mineralstoffe. Kein Schnee für Miniaturmenschen."
+  },
+  {
+    "level": 7,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Wie heißt der Brauschritt, bei dem durch gezielte Strömung Trubstoffe in der Mitte gesammelt werden?",
+    "options": [
+      "Karbonisierung",
+      "Whirlpool",
+      "Krausen",
+      "Kaskade"
+    ],
+    "correct": 1,
+    "explanation": "Beim Whirlpool wird heiße Würze kreisend bewegt, sodass sich Trubkegel bildet. Wie Badewanne, nur mit besserem Ergebnis."
+  },
+  {
+    "level": 7,
+    "category": "Geografie",
+    "difficulty": 3,
+    "text": "Welche Stadt liegt an der Mündung des Tejo?",
+    "options": [
+      "Lissabon",
+      "Marseille",
+      "Barcelona",
+      "Neapel"
+    ],
+    "correct": 0,
+    "explanation": "Lissabon liegt am Tejo-Ästuar. Das Wasser findet den Atlantik, sogar ohne GPS."
+  },
+  {
+    "level": 7,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Was steckt hinter dem „Einhorn-Horn“ beim Narwal wirklich?",
+    "options": [
+      "Ein Horn aus Hornhaut",
+      "Ein verknöcherter Stirnknochen",
+      "Ein langer oberer Eckzahn",
+      "Eine gefrorene Flosse"
+    ],
+    "correct": 2,
+    "explanation": "Der Narwal trägt einen gewaltigen verlängerten Zahn. Zahnarzttermine dauern etwas länger."
+  },
+  {
+    "level": 7,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welche Schrift wurde von Jean-François Champollion entscheidend entziffert?",
+    "options": [
+      "Runen der Wikinger",
+      "Ägyptische Hieroglyphen",
+      "Keilschrift der Sumerer",
+      "Maya-Schrift"
+    ],
+    "correct": 1,
+    "explanation": "Der Stein von Rosette half bei der Entzifferung der Hieroglyphen. Ein legendärer Spickzettel."
+  },
+  {
+    "level": 7,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Warum glüht Neon in einer klassischen Neonröhre rotorange?",
+    "options": [
+      "Wegen eines Farbstoffs aus Karotten",
+      "Angeregte Neonatome senden Licht aus",
+      "Die Röhre enthält flüssiges Feuer",
+      "Das Gas wird zu Glas"
+    ],
+    "correct": 1,
+    "explanation": "Neon leuchtet bei elektrischer Anregung typisch rotorange. Viele „Neon“-Schilder nutzen andere Gase."
+  },
+  {
+    "level": 7,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Wofür steht die Einheit Grad Plato beim Brauen?",
+    "options": [
+      "Schaumhöhe in Zentimetern",
+      "Massenanteil gelöster Stoffe in der Würze",
+      "Gradzahl der Ausschanktemperatur",
+      "Alkoholgehalt eines fertigen Biers"
+    ],
+    "correct": 1,
+    "explanation": "Grad Plato beschreibt näherungsweise den Extraktgehalt der Würze. Nicht Philosophie im Sudhaus."
+  },
+  {
+    "level": 7,
+    "category": "Völlig bescheuert",
+    "difficulty": 3,
+    "text": "Ein Mann fährt mit seinem Auto vor ein Hotel und weiß, dass er pleite ist. Warum?",
+    "options": [
+      "Er hat vergessen zu tanken",
+      "Er spielt Monopoly",
+      "Er ist ein Taxifahrer",
+      "Das Hotel ist geschlossen"
+    ],
+    "correct": 1,
+    "explanation": "In Monopoly kann ein Hotel den finanziellen Untergang bedeuten. Selten war ein Brettspiel so teuer."
+  },
+  {
+    "level": 7,
+    "category": "Weltwissen",
+    "difficulty": 3,
+    "text": "In welchem heutigen Staat lag die antike Stadt Karthago?",
+    "options": [
+      "Tunesien",
+      "Libyen",
+      "Griechenland",
+      "Ägypten"
+    ],
+    "correct": 0,
+    "explanation": "Karthago lag bei Tunis. Hannibal musste also etwas weiter als zum nächsten Biergarten."
+  },
+  {
+    "level": 8,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welche Pflanzenfamilie teilen sich Hopfen und Cannabis?",
+    "options": [
+      "Hanfgewächse",
+      "Rosengewächse",
+      "Nachtschattengewächse",
+      "Doldenblütler"
+    ],
+    "correct": 0,
+    "explanation": "Beide gehören zu den Cannabaceae. Keine Sorge: Hopfenbier ist kein Geheimtrick."
+  },
+  {
+    "level": 8,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Was ist am „Blut“ von Pfeilschwanzkrebsen besonders?",
+    "options": [
+      "Es enthält reines Eisenpulver",
+      "Es ist ein Gas",
+      "Es ist immer durchsichtig",
+      "Es ist wegen Kupferverbindungen blau"
+    ],
+    "correct": 3,
+    "explanation": "Pfeilschwanzkrebse besitzen kupferbasiertes Hämocyanin. Das Blau kommt nicht vom Meerwasser."
+  },
+  {
+    "level": 8,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welcher Vertrag beendete 1648 den Dreißigjährigen Krieg?",
+    "options": [
+      "Westfälischer Friede",
+      "Versailler Vertrag",
+      "Frieden von Utrecht",
+      "Wiener Kongress"
+    ],
+    "correct": 0,
+    "explanation": "Der Westfälische Friede wurde 1648 geschlossen. Nach drei Jahrzehnten war das auch höchste Zeit."
+  },
+  {
+    "level": 8,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Welche Farbe kann das Licht eines Sterns nicht allein aufgrund seiner Temperatur haben?",
+    "options": [
+      "Rot",
+      "Weiß",
+      "Blau",
+      "Grün als typische Sternfarbe"
+    ],
+    "correct": 3,
+    "explanation": "Sterne senden breite Spektren aus; typisch „grüne Sterne“ entstehen dadurch nicht. Physik ist eine Spaßbremse."
+  },
+  {
+    "level": 8,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Was ist ein „Saison“ ursprünglich als Bierstil?",
+    "options": [
+      "Ein ungehopftes Reisbier",
+      "Ein ausschließlich alkoholfreies Bier",
+      "Traditionell ein belgisches Farmhouse Ale",
+      "Ein bayerisches Winter-Weizen"
+    ],
+    "correct": 2,
+    "explanation": "Saison ist historisch in der wallonischen Brautradition verankert. Klingt nach Modekollektion, ist aber Bier."
+  },
+  {
+    "level": 8,
+    "category": "Geografie",
+    "difficulty": 3,
+    "text": "Welches Meer liegt zwischen Australien und Neuseeland?",
+    "options": [
+      "Schwarzes Meer",
+      "Tasmansee",
+      "Kaspisches Meer",
+      "Rotes Meer"
+    ],
+    "correct": 1,
+    "explanation": "Die Tasmansee trennt Australien und Neuseeland. Die Fähre wäre eine lange Angelegenheit."
+  },
+  {
+    "level": 8,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Warum ist das Fell von Seeottern so wichtig?",
+    "options": [
+      "Sie isolieren vor allem mit extrem dichtem Fell",
+      "Ihr Fell erzeugt Strom",
+      "Ihr Fell ist wasserlöslich",
+      "Sie schwitzen darüber Salz aus"
+    ],
+    "correct": 0,
+    "explanation": "Seeotter haben keine dicke isolierende Speckschicht wie viele andere Meeressäuger und nutzen dichtes Fell."
+  },
+  {
+    "level": 8,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Wer ließ die Terrakotta-Armee in China für sein Grab anfertigen?",
+    "options": [
+      "Konfuzius",
+      "Kublai Khan",
+      "Qin Shihuangdi",
+      "Mao Zedong"
+    ],
+    "correct": 2,
+    "explanation": "Der erste Kaiser der Qin-Dynastie ließ die Armee schaffen. Ein sehr aufwendiges Grab-Accessoire."
+  },
+  {
+    "level": 8,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Was bedeutet die Abkürzung „SOS“ ursprünglich als internationales Notsignal?",
+    "options": [
+      "Save Our Ship",
+      "Signal Of Safety",
+      "Es ist kein Akronym für feste Worte",
+      "Save Our Souls"
+    ],
+    "correct": 2,
+    "explanation": "SOS wurde als gut erkennbares Morsezeichen ausgewählt. Die bekannten Worterklärungen kamen später."
+  },
+  {
+    "level": 8,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welche Aromastoffgruppe kann bei Weizenbier nach Gewürznelke riechen?",
+    "options": [
+      "Kochsalz",
+      "Phenole, etwa 4-Vinylguajakol",
+      "Ameisensäure",
+      "Chlorophyll"
+    ],
+    "correct": 1,
+    "explanation": "Bestimmte Hefestämme bilden 4-Vinylguajakol. Der Gewürzschrank bleibt zu."
+  },
+  {
+    "level": 8,
+    "category": "Völlig bescheuert",
+    "difficulty": 3,
+    "text": "Was ist an der Aussage „Ein Strauß steckt bei Gefahr den Kopf in den Sand“ richtig?",
+    "options": [
+      "Sie ist ein verbreiteter Mythos",
+      "Strauße graben dafür Löcher mit dem Schnabel",
+      "Nur Männchen tun das",
+      "Sie gilt für alle Strauße"
+    ],
+    "correct": 0,
+    "explanation": "Strauße stecken bei Gefahr nicht einfach den Kopf in den Sand. Sonst wäre Evolution sehr kurz gewesen."
+  },
+  {
+    "level": 8,
+    "category": "Weltwissen",
+    "difficulty": 3,
+    "text": "Was ist unter anderem eine Besonderheit der antarktischen Wüste?",
+    "options": [
+      "Sehr geringe Niederschläge",
+      "Sie ist von Kakteen bedeckt",
+      "Sie liegt komplett auf der Nordhalbkugel",
+      "Sie besteht nur aus Sand"
+    ],
+    "correct": 0,
+    "explanation": "Wüsten werden über Trockenheit definiert. Frost kann also locker dazugehören."
+  },
+  {
+    "level": 9,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welcher Begriff beschreibt in der Brautechnik „Diacetyl“ besonders treffend?",
+    "options": [
+      "Eine Hopfensorte aus England",
+      "Einen speziellen Bierdeckel",
+      "Eine Braukessel-Legierung",
+      "Eine Verbindung mit butterartigem Aroma"
+    ],
+    "correct": 3,
+    "explanation": "Diacetyl kann in Bier an Butter oder Butterscotch erinnern. Für Popcorn gut, im Bier nicht immer gewünscht."
+  },
+  {
+    "level": 9,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Was ist über die Entwicklung der menschlichen und Oktopusaugen besonders interessant?",
+    "options": [
+      "Sie zeigen konvergente Evolution",
+      "Oktopusse haben grundsätzlich keine Netzhaut",
+      "Sie haben dieselbe direkte Augen-Abstammung",
+      "Menschenaugen stammen vom Oktopus ab"
+    ],
+    "correct": 0,
+    "explanation": "Kameraartige Augen entwickelten sich in verschiedenen Tierlinien unabhängig. Die Natur kann ähnliche Lösungen mehrfach finden."
+  },
+  {
+    "level": 9,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welche historische Stadt war Hauptstadt des Byzantinischen Reichs?",
+    "options": [
+      "Athen",
+      "Konstantinopel",
+      "Rom",
+      "Antiochia"
+    ],
+    "correct": 1,
+    "explanation": "Konstantinopel war über Jahrhunderte das Machtzentrum des Oströmischen Reichs. Heute heißt die Stadt Istanbul."
+  },
+  {
+    "level": 9,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Was ist am kochenden Wasser auf dem Mount Everest ungewöhnlich?",
+    "options": [
+      "Es kocht erst über 150 °C",
+      "Es verwandelt sich sofort in Eis",
+      "Es kocht überhaupt nicht",
+      "Es kocht wegen des niedrigen Luftdrucks unter 100 °C"
+    ],
+    "correct": 3,
+    "explanation": "Durch den geringen Luftdruck sinkt die Siedetemperatur. Der Berg ist ein miserabler Ort für al dente Pasta."
+  },
+  {
+    "level": 9,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Was bedeutet „Attenuation“ in der Brauereipraxis?",
+    "options": [
+      "Würzekochzeit",
+      "Vergärungsgrad",
+      "Fassdurchmesser",
+      "Hopfenoxidation"
+    ],
+    "correct": 1,
+    "explanation": "Die Attenuation beschreibt den Vergärungsgrad der Würze. Klingt nach Latein-Klausur mit Fassbier."
+  },
+  {
+    "level": 9,
+    "category": "Geografie",
+    "difficulty": 3,
+    "text": "Welche Hauptstadt liegt am Zusammenfluss von Save und Donau?",
+    "options": [
+      "Wien",
+      "Zagreb",
+      "Belgrad",
+      "Bratislava"
+    ],
+    "correct": 2,
+    "explanation": "Belgrad liegt am Zusammenfluss von Save und Donau. Zwei Flüsse, eine schwierige Quizfrage."
+  },
+  {
+    "level": 9,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Welches dieser Tiere gehört zu den Kloakentieren?",
+    "options": [
+      "Ameisenigel",
+      "Biber",
+      "Meerschweinchen",
+      "Nacktmull"
+    ],
+    "correct": 0,
+    "explanation": "Ameisenigel und Schnabeltiere legen Eier und sind Säugetiere. Evolution mit Extrafunktionen."
+  },
+  {
+    "level": 9,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Von welcher Schrift wurde das griechische Alphabet maßgeblich angeregt?",
+    "options": [
+      "Ägyptische Hieroglyphen direkt ohne Zwischenstufe",
+      "Runen",
+      "Maya-Schrift",
+      "Phönizische Schrift"
+    ],
+    "correct": 3,
+    "explanation": "Das griechische Alphabet entwickelte sich aus der phönizischen Schrift. Sogar Buchstaben haben eine Familiengeschichte."
+  },
+  {
+    "level": 9,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Warum sind die Scheinfarben mancher Insektenflügel winkelabhängig?",
+    "options": [
+      "Interferenz und Strukturfarben",
+      "Die Tiere färben sich aktiv mit Tinte",
+      "Die Luft schmeckt anders",
+      "Der Flügel wird heiß"
+    ],
+    "correct": 0,
+    "explanation": "Mikroskopische Strukturen verändern reflektiertes Licht. Ein Natur-Filter ohne Instagram."
+  },
+  {
+    "level": 9,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welche Aussage über „Brettanomyces“ im Bier stimmt?",
+    "options": [
+      "Es ist ein Getreide",
+      "Es ist eine CO₂-Flaschenmarke",
+      "Es ist eine Hefegattung, die spezielle Aromen erzeugen kann",
+      "Es ist nur ein Hopfenöl"
+    ],
+    "correct": 2,
+    "explanation": "Brettanomyces kann erdige oder stallartige Noten bilden. „Pferdedecke“ ist wirklich eine Geschmacksbeschreibung."
+  },
+  {
+    "level": 9,
+    "category": "Völlig bescheuert",
+    "difficulty": 3,
+    "text": "Auf einer Insel stehen zwei Personen: eine lügt immer, eine sagt immer die Wahrheit. Welche Frage hilft, wenn du nur eine fragen darfst, welcher Weg zum Bier führt?",
+    "options": [
+      "„Bist du ehrlich?“",
+      "„Welchen Weg würde der andere mir nennen?“ – dann den anderen nehmen",
+      "„Magst du Bier?“",
+      "„Ist der Himmel blau?“"
+    ],
+    "correct": 1,
+    "explanation": "Beide zeigen bei dieser Konstruktion auf den falschen Weg. Also einfach den anderen nehmen."
+  },
+  {
+    "level": 9,
+    "category": "Weltwissen",
+    "difficulty": 3,
+    "text": "Welcher Chemiker ordnete Elemente zu einem Periodensystem mit Vorhersagen noch unbekannter Elemente?",
+    "options": [
+      "Isaac Newton",
+      "Michael Faraday",
+      "Dmitri Mendelejew",
+      "Louis Pasteur"
+    ],
+    "correct": 2,
+    "explanation": "Mendelejew sagte Eigenschaften damals noch nicht entdeckter Elemente voraus. Mehr Voraussicht als unser Kühlschrank."
+  },
+  {
+    "level": 10,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welcher Aromastoff ist maßgeblich für den „Lichtgeschmack“ mancher Biere verantwortlich?",
+    "options": [
+      "Milchsäure",
+      "3-Methyl-2-buten-1-thiol",
+      "Koffein",
+      "Vanillin"
+    ],
+    "correct": 1,
+    "explanation": "Bei Lichteinwirkung können aus Hopfenbitterstoffen schwefelhaltige Verbindungen entstehen, die „stinktierartig“ riechen."
+  },
+  {
+    "level": 10,
+    "category": "Völlig bescheuert",
+    "difficulty": 3,
+    "text": "Ein Mann sieht ein Foto und sagt: „Ich habe keine Geschwister. Aber der Vater dieses Mannes ist der Sohn meines Vaters.“ Wen zeigt das Foto?",
+    "options": [
+      "Seinen Onkel",
+      "Seinen Vater",
+      "Seinen Sohn",
+      "Sich selbst"
+    ],
+    "correct": 2,
+    "explanation": "Der Sohn seines Vaters ist er selbst. Also ist er der Vater der Person auf dem Foto. Denkpause inklusive."
+  },
+  {
+    "level": 10,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welche Sprache der Antike ist auf dem Stein von Rosette neben Hieroglyphen und demotischer Schrift zu finden?",
+    "options": [
+      "Sanskrit",
+      "Hebräisch",
+      "Latein",
+      "Altgriechisch"
+    ],
+    "correct": 3,
+    "explanation": "Der dreisprachig beschriftete Stein half beim Entziffern ägyptischer Schriften. Drei Fassungen, endlich eine lesbar."
+  },
+  {
+    "level": 10,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Welcher physikalische Effekt erklärt die scheinbare Verschiebung eines Sternorts durch die Bewegung der Erde?",
+    "options": [
+      "Aberration des Lichts",
+      "Photoeffekt",
+      "Dopplereffekt beim Bieröffnen",
+      "Corioliskraft"
+    ],
+    "correct": 0,
+    "explanation": "Die jährliche Aberration entsteht durch die Relativbewegung zwischen Beobachter und Licht. Sterne werden nicht wirklich herumgeschoben."
+  },
+  {
+    "level": 10,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Was beschreibt die „Kräusen“-Phase beim Bierbrauen?",
+    "options": [
+      "Eine spezielle Malzröstung",
+      "Eine Fasslagerung im Schnee",
+      "Die Reinigung des Zapfhahns",
+      "Eine schaumige Phase der Hauptgärung"
+    ],
+    "correct": 3,
+    "explanation": "Kräusen nennt man den Schaumteppich bei aktiver Gärung. Der sieht aus, als hätte das Bier Haare."
+  },
+  {
+    "level": 10,
+    "category": "Geografie",
+    "difficulty": 3,
+    "text": "Welcher Staat hat den größten Anteil am Einzugsgebiet des Amazonas?",
+    "options": [
+      "Peru",
+      "Brasilien",
+      "Bolivien",
+      "Kolumbien"
+    ],
+    "correct": 1,
+    "explanation": "Brasilien umfasst den größten Teil des Amazonasbeckens. Der Fluss ist internationaler als viele Stammtische."
+  },
+  {
+    "level": 10,
+    "category": "Tierisch unnütz",
+    "difficulty": 3,
+    "text": "Welcher biologische Mechanismus hilft Laubfröschen beim Festhalten an glatten Oberflächen?",
+    "options": [
+      "Saugnäpfe mit Batterien",
+      "Feuchte Haftpolster an den Zehen",
+      "Kleine Krallen aus Metall",
+      "Elektromagnete"
+    ],
+    "correct": 1,
+    "explanation": "Laubfrösche haften durch spezialisierte Zehenpolster und dünne Flüssigkeitsfilme. Keine Klebestifte nötig."
+  },
+  {
+    "level": 10,
+    "category": "Geschichte",
+    "difficulty": 3,
+    "text": "Welcher Forscher beschrieb die Blutkreislauf-Funktion des Herzens im 17. Jahrhundert systematisch?",
+    "options": [
+      "Robert Koch",
+      "William Harvey",
+      "Andreas Vesalius",
+      "Antonie van Leeuwenhoek"
+    ],
+    "correct": 1,
+    "explanation": "Harvey veröffentlichte 1628 seine Erklärung des Blutkreislaufs. Zum Glück nicht als TikTok-Video."
+  },
+  {
+    "level": 10,
+    "category": "Kuriose Fakten",
+    "difficulty": 3,
+    "text": "Welches Element verdankt seinen Namen einer nordischen Göttin?",
+    "options": [
+      "Helium",
+      "Vanadium",
+      "Argon",
+      "Neon"
+    ],
+    "correct": 1,
+    "explanation": "Vanadium ist nach Vanadis, einem Beinamen Freyjas, benannt. Das Periodensystem hat Mythologie im Gepäck."
+  },
+  {
+    "level": 10,
+    "category": "Bier & Brauen",
+    "difficulty": 3,
+    "text": "Welche Verbindung wird beim Bierbrauen mit „DMS“ abgekürzt und kann an gekochten Mais erinnern?",
+    "options": [
+      "Dimethylsulfid",
+      "Dibutylmethan",
+      "Dinatriummalat",
+      "Doppelt gemalzter Sud"
+    ],
+    "correct": 0,
+    "explanation": "Dimethylsulfid ist ein flüchtiger Aromastoff, dessen Überschuss oft als gekochter Mais beschrieben wird."
+  },
+  {
+    "level": 10,
+    "category": "Völlig bescheuert",
+    "difficulty": 3,
+    "text": "Du bist im komplett dunklen Zimmer mit einer Kerze, einer Öllampe und einem Kamin. Was zündest du zuerst an?",
+    "options": [
+      "Den Kamin",
+      "Die Kerze",
+      "Die Öllampe",
+      "Das Streichholz"
+    ],
+    "correct": 3,
+    "explanation": "Ohne Streichholz geht gar nichts los. Gut, dass in dieser Runde niemand das Licht angemacht hat."
+  },
+  {
+    "level": 10,
+    "category": "Weltwissen",
+    "difficulty": 3,
+    "text": "Welches der folgenden Völker verwendete das Quipu als Aufzeichnungssystem?",
+    "options": [
+      "Inka",
+      "Wikinger",
+      "Römer",
+      "Phönizier"
+    ],
+    "correct": 0,
+    "explanation": "Die Inka nutzten Knotenschnüre zur Informationsverwaltung. Tabellenkalkulation mit Wolle."
+  }
+];
+  const EXTRA_QUESTIONS = [
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welche Eigenschaft haben Eulenaugen?",
+    "options": [
+      "Sie sitzen hinten am Kopf",
+      "Sie leuchten aus eigener Kraft",
+      "Sie können wie Kaugummi herausgezogen werden",
+      "Sie sind im Schädel nur begrenzt beweglich"
+    ],
+    "correct": 3,
+    "explanation": "Eulen müssen ihren Kopf stark drehen, um den Blick zu ändern. Ja, die Kopfbewegung ist Absicht."
+  },
+  {
+    "category": "Küche & Kurioses",
+    "difficulty": 1,
+    "text": "Welche Farbe hat eine reife grüne Paprika normalerweise?",
+    "options": [
+      "Blau",
+      "Schwarz",
+      "Violett",
+      "Grün"
+    ],
+    "correct": 3,
+    "explanation": "Manchmal liegt die Antwort doch vor einem. Dieses eine Mal darf die Familie tief durchatmen."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welche antike Hochkultur nutzte Hieroglyphen?",
+    "options": [
+      "Inka",
+      "Altes Ägypten",
+      "Römisches Reich",
+      "Wikinger"
+    ],
+    "correct": 1,
+    "explanation": "Ägyptische Hieroglyphen waren ein Schriftsystem, keine uralte Emoji-Tastatur."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was passiert hauptsächlich bei der alkoholischen Gärung?",
+    "options": [
+      "Hopfen verwandelt sich in Kork",
+      "Wasser wird zu Malz",
+      "Salz wird zu Schaum",
+      "Hefe setzt Zucker zu Ethanol und CO₂ um"
+    ],
+    "correct": 3,
+    "explanation": "Hefe ist die unsichtbare Belegschaft der Brauerei."
+  },
+  {
+    "category": "Allgemeinwissen",
+    "difficulty": 1,
+    "text": "Wie nennt man das Phänomen, dass eine Erinnerung durch einen Geruch ausgelöst wird?",
+    "options": [
+      "Nordlicht-Effekt",
+      "Proust-Effekt",
+      "Placebo-Bier",
+      "Doppler-Effekt"
+    ],
+    "correct": 1,
+    "explanation": "Der Proust-Effekt bezeichnet geruchsgetriggerte autobiografische Erinnerungen. Mamas Küche lässt grüßen."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Was ist eine Quokka?",
+    "options": [
+      "Eine Biermarke aus Peru",
+      "Eine scharfe Paprika",
+      "Ein kleines Beuteltier",
+      "Ein Fisch aus der Tiefsee"
+    ],
+    "correct": 2,
+    "explanation": "Das Quokka ist ein australisches Beuteltier mit scheinbar dauerndem Grinsen."
+  },
+  {
+    "category": "Küche & Kurioses",
+    "difficulty": 1,
+    "text": "Welche Zutat lässt Brot durch Gärung aufgehen?",
+    "options": [
+      "Öl",
+      "Kakao",
+      "Pfeffer",
+      "Hefe"
+    ],
+    "correct": 3,
+    "explanation": "Hefe erzeugt Kohlendioxid. Backen und Brauen teilen sich mehr als die Küche."
+  },
+  {
+    "category": "Weltwissen",
+    "difficulty": 1,
+    "text": "Welche dieser Städte liegt NICHT in Italien?",
+    "options": [
+      "Porto",
+      "Turin",
+      "Bologna",
+      "Neapel"
+    ],
+    "correct": 0,
+    "explanation": "Porto liegt in Portugal. Aber alle vier klingen nach gutem Abendessen."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was ist ein Bier-Sommelier?",
+    "options": [
+      "Ein Gerichtsvollzieher für Bier",
+      "Ein Fassreiniger",
+      "Ein Arzt für Hopfenallergien",
+      "Eine Person mit Expertise in Bierstilen und Verkostung"
+    ],
+    "correct": 3,
+    "explanation": "Bier-Sommeliers befassen sich unter anderem mit Sensorik und Kombinationen von Speisen."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Was ist bei Kängurus in Australien besonders charakteristisch?",
+    "options": [
+      "Viele Weibchen haben einen Beutel",
+      "Alle können rückwärts fliegen",
+      "Sie legen im Winter Eier",
+      "Sie leben ausschließlich im Meer"
+    ],
+    "correct": 0,
+    "explanation": "Der Beutel schützt und versorgt das Jungtier. Praktischer als jeder Kinderwagen."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Welche Frucht gehört zur Familie der Nachtschattengewächse?",
+    "options": [
+      "Tomate",
+      "Apfel",
+      "Kokosnuss",
+      "Orange"
+    ],
+    "correct": 0,
+    "explanation": "Die Tomate gehört wie Kartoffel und Aubergine zu den Nachtschattengewächsen."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welcher geschmackliche Eindruck kann aus Hopfen stammen?",
+    "options": [
+      "Reiner Zucker",
+      "Zitrusnoten",
+      "Speck durch Hefe allein",
+      "Vanillepudding ohne Zusätze"
+    ],
+    "correct": 1,
+    "explanation": "Einige Hopfensorten können zitrische, tropische oder harzige Aromen liefern."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welche Kultur entwickelte in Mesopotamien die Keilschrift?",
+    "options": [
+      "Sumerer",
+      "Maya",
+      "Wikinger",
+      "Azteken"
+    ],
+    "correct": 0,
+    "explanation": "Die Sumerer gehören zu den frühesten Anwendern der Keilschrift. Auch die hatten Papierkram."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welche Tiergruppe besitzt weder Knochen noch Wirbelsäule?",
+    "options": [
+      "Delfine",
+      "Seepferdchen",
+      "Quallen",
+      "Haie"
+    ],
+    "correct": 2,
+    "explanation": "Quallen bestehen größtenteils aus Wasser und besitzen kein Knochenskelett."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was ist der Unterschied zwischen Meteoroid und Meteorit?",
+    "options": [
+      "Meteoroiden bestehen aus Wolken",
+      "Meteoroiden sind immer größer als Planeten",
+      "Ein Meteorit erreicht den Erdboden",
+      "Meteoriten kreisen nur um Jupiter"
+    ],
+    "correct": 2,
+    "explanation": "Meteoroiden sind Körper im All; erreichen Bruchstücke den Boden, heißen sie Meteoriten."
+  },
+  {
+    "category": "Sprache & Unsinn",
+    "difficulty": 1,
+    "text": "Was bedeutet „Torschlusspanik“ ursprünglich bildlich?",
+    "options": [
+      "Panik vor einem aufgebrauchten Bierfass",
+      "Angst vorm Elfmeterschießen",
+      "Angst vor einer Rolltreppe",
+      "Angst vor dem Schließen eines Stadttors"
+    ],
+    "correct": 3,
+    "explanation": "Das Wort erinnert an verschlossene Stadttore. Heute beschreibt es den Druck, etwas zu verpassen."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welcher Stoff ist maßgeblich für Kohlensäure im Bier?",
+    "options": [
+      "Gelöstes Kohlendioxid",
+      "Gelöster Sauerstoff",
+      "Silber aus Kronkorken",
+      "Stickstoff aus Leitungswasser"
+    ],
+    "correct": 0,
+    "explanation": "CO₂ entsteht bei der Gärung und kann zusätzlich bei der Karbonisierung eingebracht werden."
+  },
+  {
+    "category": "Weltwissen",
+    "difficulty": 1,
+    "text": "Was ist das flächenmäßig kleinste Land der Welt?",
+    "options": [
+      "Monaco",
+      "San Marino",
+      "Liechtenstein",
+      "Vatikanstadt"
+    ],
+    "correct": 3,
+    "explanation": "Vatikanstadt ist der kleinste international anerkannte Staat. Wenig Fläche, viel Geschichte."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Warum „leuchtet“ ein Glühwürmchen?",
+    "options": [
+      "Wegen winziger Batterien",
+      "Biolumineszenz durch chemische Reaktion",
+      "Durch reflektierte Straßenlampen",
+      "Durch Sonnenbrand"
+    ],
+    "correct": 1,
+    "explanation": "Glühwürmchen erzeugen Licht durch chemische Reaktionen. Umweltfreundlicher als jede Partylichterkette."
+  },
+  {
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "Ein Mann steht im strömenden Regen ohne Regenschirm. Kein Haar wird nass. Warum?",
+    "options": [
+      "Er wohnt unter Wasser",
+      "Der Regen ist trocken",
+      "Er ist glatzköpfig",
+      "Seine Haare sind wasserfest"
+    ],
+    "correct": 2,
+    "explanation": "Weil er keine Haare hat. Ein Klassiker unter den Fragen, die man gerne überdenkt."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welche Stadt ist besonders für Kölsch bekannt?",
+    "options": [
+      "Kassel",
+      "Kempten",
+      "Kiel",
+      "Köln"
+    ],
+    "correct": 3,
+    "explanation": "Der Name verrät es. Kölsch ist zusätzlich regional geschützt."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was ist ein „Katzenauge“ an der Straße typischerweise?",
+    "options": [
+      "Ein rückstrahlender Reflektor",
+      "Ein Haustierpass",
+      "Eine Kamera mit Katzenerkennung",
+      "Ein optisches Gerät zum Mäusezählen"
+    ],
+    "correct": 0,
+    "explanation": "Rückstrahler machen Fahrbahnmarkierungen sichtbarer. Katzen sind nicht anwesend."
+  },
+  {
+    "category": "Allgemeinwissen",
+    "difficulty": 1,
+    "text": "Welcher dieser Wissenschaftler beschäftigte sich besonders mit der Evolution durch natürliche Selektion?",
+    "options": [
+      "Marie Curie",
+      "Alan Turing",
+      "Charles Darwin",
+      "Albert Einstein"
+    ],
+    "correct": 2,
+    "explanation": "Darwin und Wallace entwickelten die Theorie der natürlichen Selektion. Nicht alles ist vom stärksten Bier abhängig."
+  },
+  {
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "Welche dieser Aussagen kann wahr sein, ohne dass ein Mensch fliegen kann?",
+    "options": [
+      "Ein Mensch fliegt im Flugzeug",
+      "Ein Mensch fliegt durch bloßes Denken",
+      "Ein Mensch fliegt mit den Armen",
+      "Ein Mensch fliegt aus eigener Kraft wie ein Adler"
+    ],
+    "correct": 0,
+    "explanation": "Mit dem Flugzeug kann man fliegen, ohne selbst Flügel zu haben. Sprachlich sauber, aber trotzdem gemein."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welcher Bierstil wird manchmal mit einem Klecks Himbeer- oder Waldmeistersirup serviert?",
+    "options": [
+      "Dry Stout",
+      "Helles",
+      "India Pale Ale",
+      "Berliner Weiße"
+    ],
+    "correct": 3,
+    "explanation": "Berliner Weiße wird traditionell teils mit Sirup serviert. Für alle, die ihre saure Überraschung erst süß machen."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welcher Begriff bezeichnet den Einmarsch napoleonischer Truppen nach Russland 1812?",
+    "options": [
+      "Rosenkrieg",
+      "Krimkrieg",
+      "Hundertjähriger Krieg",
+      "Russlandfeldzug"
+    ],
+    "correct": 3,
+    "explanation": "Napoleons Russlandfeldzug endete in einer Katastrophe. Winterurlaub war damals falsch geplant."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welches dieser Tiere kann den Kopf besonders weit drehen, ohne ihn rundherum zu schrauben?",
+    "options": [
+      "Eule",
+      "Delfin",
+      "Faultier",
+      "Pferd"
+    ],
+    "correct": 0,
+    "explanation": "Eulen können ihren Kopf sehr weit drehen, aber nicht unendlich oft. Das wäre anatomisch zu viel Show."
+  },
+  {
+    "category": "Küche & Kurioses",
+    "difficulty": 1,
+    "text": "Was ist „Aquafaba“?",
+    "options": [
+      "Eine tropische Fischart",
+      "Kochflüssigkeit von Hülsenfrüchten",
+      "Ein spanisches Wasserfass",
+      "Ein Name für Eiskristalle"
+    ],
+    "correct": 1,
+    "explanation": "Aquafaba ist oft Kichererbsenwasser und lässt sich sogar zu Schaum aufschlagen. Küchenzauberei aus der Dose."
+  },
+  {
+    "category": "Weltwissen",
+    "difficulty": 1,
+    "text": "Wo liegt die historische Region Transsilvanien?",
+    "options": [
+      "Rumänien",
+      "Ungarn ausschließlich",
+      "Bulgarien",
+      "Slowakei"
+    ],
+    "correct": 0,
+    "explanation": "Transsilvanien liegt in Rumänien. Dracula lässt grüßen, historisch aber komplizierter."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was ist beim Brauen „Kalttrub“?",
+    "options": [
+      "Eine gefrorene Malzsorte",
+      "Eine Absperrung im Biergarten",
+      "Ausgefällte Stoffe beim Abkühlen der Würze",
+      "Schimmel im Kühlschrank"
+    ],
+    "correct": 2,
+    "explanation": "Beim Abkühlen können unter anderem Eiweißbestandteile ausfallen. Der Name klingt gruseliger als der Prozess."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welche Forscherin gewann Nobelpreise in zwei verschiedenen Naturwissenschaften?",
+    "options": [
+      "Marie Curie",
+      "Ada Lovelace",
+      "Jane Goodall",
+      "Rosalind Franklin"
+    ],
+    "correct": 0,
+    "explanation": "Marie Curie erhielt Nobelpreise für Physik und Chemie. Mehrfacher Spitzenplatz ohne Glücksrad."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welches Tier nutzt Elektrizität zur Jagd und Verteidigung?",
+    "options": [
+      "Clownfisch",
+      "Seepferdchen",
+      "Karpfen",
+      "Zitteraal"
+    ],
+    "correct": 3,
+    "explanation": "Zitteraale erzeugen starke elektrische Entladungen. Eine Powerbank mit schlechter Laune."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Was ist ein „Geosmin“ besonders bekannt für?",
+    "options": [
+      "Erdigen Geruch",
+      "Süße im Honig",
+      "Schärfe im Chili",
+      "Farbe von Bierglas"
+    ],
+    "correct": 0,
+    "explanation": "Geosmin trägt zu typischem erdigem Geruch bei, etwa nach Regen. Sehr gut für Nase, sehr schlecht für die Rechtschreibung."
+  },
+  {
+    "category": "Allgemeinwissen",
+    "difficulty": 1,
+    "text": "Was ist bei einem „Ohrwurm“ gemeint?",
+    "options": [
+      "Ein Wurm, der in jedem Ohr lebt",
+      "Ein hartnäckig im Kopf bleibendes Musikstück",
+      "Eine Biersorte aus Wales",
+      "Ein medizinischer Kopfhörer"
+    ],
+    "correct": 1,
+    "explanation": "Der Ohrwurm ist eine Melodie, die im Kopf hängenbleibt. Leider nicht immer eine gute."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Welche Besonderheit besitzen Fangschreckenkrebse?",
+    "options": [
+      "Sie leben immer als Paare im Himmel",
+      "Manche schlagen extrem schnell mit Fangarmen zu",
+      "Sie haben keine Augen",
+      "Sie ernähren sich nur von Steinen"
+    ],
+    "correct": 1,
+    "explanation": "Die Schläge mancher Arten sind enorm schnell und kräftig. Der Boxverein des Meeres."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Was versteht man unter einem „Flight“ bei einer Bierverkostung?",
+    "options": [
+      "Den Transport eines Fasses per Flugzeug",
+      "Mehrere kleine Proben verschiedener Biere",
+      "Ein Bier mit Flügeln",
+      "Eine besonders hohe Schaumkrone"
+    ],
+    "correct": 1,
+    "explanation": "Ein Tasting-Flight bietet mehrere kleine Probierportionen. Die einzige Flugreise, die auf dem Tisch endet."
+  },
+  {
+    "category": "Geografie",
+    "difficulty": 1,
+    "text": "Welches Gewässer trennt Großbritannien vom europäischen Festland?",
+    "options": [
+      "Panamakanal",
+      "Sueskanal",
+      "Ärmelkanal",
+      "Bosporus"
+    ],
+    "correct": 2,
+    "explanation": "Der Ärmelkanal trennt die Insel vom Kontinent. Für eine Fähre noch ein lösbares Problem."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Welches Organ ist beim Menschen das größte innere Organ?",
+    "options": [
+      "Leber",
+      "Milz",
+      "Herz",
+      "Gallenblase"
+    ],
+    "correct": 0,
+    "explanation": "Die Leber ist das größte innere Organ. Nicht nur für den Stammtisch wichtig."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welche römische Zahl steht für 500?",
+    "options": [
+      "D",
+      "L",
+      "C",
+      "M"
+    ],
+    "correct": 0,
+    "explanation": "D steht für 500. D wie „Das ist viel zu viel für die Runde“."
+  },
+  {
+    "category": "Tierisch unnütz",
+    "difficulty": 1,
+    "text": "Bei welchen Säugetieren kann eine Art Winterschlaf mehrere Monate dauern?",
+    "options": [
+      "Fledermäuse",
+      "Giraffen",
+      "Elefanten",
+      "Delfine"
+    ],
+    "correct": 0,
+    "explanation": "Einige Fledermäuse halten über Monate Winterschlaf. Perfektes Vorbild für Montagmorgen."
+  },
+  {
+    "category": "Bier & Brauen",
+    "difficulty": 1,
+    "text": "Welche Temperatur wird für klassische untergärige Gärung grob eher genutzt?",
+    "options": [
+      "Kühl, etwa 8 bis 14 °C",
+      "Unter −20 °C",
+      "Konstant 100 °C",
+      "Mindestens 60 °C"
+    ],
+    "correct": 0,
+    "explanation": "Untergärige Lagerbiere vergären meist kühler als viele Ales. Die Hefe mag es entspannt."
+  },
+  {
+    "category": "Geschichte",
+    "difficulty": 1,
+    "text": "Welcher antike Herrscher führte seine Armee samt Kriegselefanten über die Alpen?",
+    "options": [
+      "Ramses II.",
+      "Caesar",
+      "Hannibal",
+      "Attila"
+    ],
+    "correct": 2,
+    "explanation": "Hannibal zog im Zweiten Punischen Krieg über die Alpen. Mit Elefanten – wegen fehlender Autobahn."
+  },
+  {
+    "category": "Völlig bescheuert",
+    "difficulty": 1,
+    "text": "In welcher Situation kannst du einen leeren Bierkrug auf den Tisch stellen, ohne ihn zu berühren?",
+    "options": [
+      "Nur mit Magneten",
+      "Nur bei Vollmond",
+      "Wenn das Bier besonders kalt ist",
+      "Wenn du Handschuhe trägst und ihn damit hältst"
+    ],
+    "correct": 3,
+    "explanation": "Wer Handschuhe trägt, berührt den Krug nicht direkt mit der Haut. Gemein, aber korrekt."
+  },
+  {
+    "category": "Kuriose Fakten",
+    "difficulty": 1,
+    "text": "Warum erscheinen Wolken oft weiß?",
+    "options": [
+      "Viele Wassertröpfchen streuen sichtbares Licht",
+      "Weil sie Kreidestaub enthalten",
+      "Weil ihre Temperatur immer null ist",
+      "Weil sie Sonnenlicht selbst herstellen"
+    ],
+    "correct": 0,
+    "explanation": "Wolken streuen verschiedene sichtbare Wellenlängen. Eine riesige Lichtshow ohne Nebelmaschine."
+  }
+];
+  const QUESTIONS = [...CLASSIC_QUESTIONS.map(({level,...q})=>q), ...EXTRA_QUESTIONS];
   const ESTIMATES = [
-    {text:'In welchem Jahr wurde das bayerische Reinheitsgebot erlassen?',answer:1516,unit:'Jahr',explanation:'Das Datum ist 1516. Ein erstaunlich altes „Bitte nichts Falsches ins Bier“.'},
-    {text:'In welchem Jahr fand das erste Oktoberfest in München statt?',answer:1810,unit:'Jahr',explanation:'1810 fand das Fest zur Hochzeit von Ludwig und Therese statt.'},
-    {text:'Wie viele Milliliter passen in eine klassische bayerische Maß?',answer:1000,unit:'ml',explanation:'Ein Liter = 1000 Milliliter. Prost Mathematik.'},
-    {text:'Wie viele Tage hat ein Schaltjahr?',answer:366,unit:'Tage',explanation:'Ein Schaltjahr hat einen zusätzlichen 29. Februar.'},
-    {text:'Wie viele Minuten hat eine volle Woche?',answer:10080,unit:'Minuten',explanation:'7 × 24 × 60 = 10.080.'},
-    {text:'Wie viele Felder haben fünf gewöhnliche Schachbretter zusammen?',answer:320,unit:'Felder',explanation:'5 × 64 = 320 Felder.'},
-    {text:'Wie viele Zentimeter sind 2,5 Kilometer?',answer:250000,unit:'cm',explanation:'1 Kilometer = 100.000 Zentimeter.'},
-    {text:'Wie viele Sekunden stecken in 24 Stunden?',answer:86400,unit:'Sekunden',explanation:'24 × 60 × 60 = 86.400 Sekunden.'},
-    {text:'Wie viele Bundesländer hat Deutschland?',answer:16,unit:'Bundesländer',explanation:'Deutschland hat 16 Bundesländer.'},
-    {text:'Wie viele Tasten hat ein übliches modernes Klavier?',answer:88,unit:'Tasten',explanation:'Das Standardklavier besitzt 88 Tasten.'},
-    {text:'In welchem Jahr wurde der Eiffelturm eröffnet?',answer:1889,unit:'Jahr',explanation:'Die Eröffnung war 1889.'},
-    {text:'Wie viele Karten hat ein übliches französisches Kartenspiel ohne Joker?',answer:52,unit:'Karten',explanation:'Vier Farben mit jeweils 13 Karten.'},
-    {text:'Wie viele Stunden haben 14 Tage?',answer:336,unit:'Stunden',explanation:'14 × 24 = 336.'},
-    {text:'Wie viele Spieler stehen beim Fußball zu Beginn regulär in zwei Mannschaften insgesamt auf dem Feld?',answer:22,unit:'Spieler',explanation:'11 plus 11 ergibt 22 Spieler.'},
-    {text:'In welchem Jahr wurde die erste Mondlandung von Menschen durchgeführt?',answer:1969,unit:'Jahr',explanation:'Apollo 11 landete 1969 auf dem Mond.'},
-    {text:'Wie viele Gramm sind 3,5 Kilogramm?',answer:3500,unit:'Gramm',explanation:'3,5 Kilogramm sind 3500 Gramm.'},
-    {text:'Wie viele Seiten ergeben vier normale sechsseitige Würfel zusammen?',answer:24,unit:'Seiten',explanation:'Vier mal sechs ergibt 24.'},
-    {text:'Wie viele Monate umfassen drei Jahre?',answer:36,unit:'Monate',explanation:'3 × 12 = 36 Monate.'}
-  ];
+  {
+    "text": "In welchem Jahr wurde das bayerische Reinheitsgebot erlassen?",
+    "answer": 1516,
+    "unit": "Jahr",
+    "explanation": "1516, in Ingolstadt. Die Hefe war im damaligen Wortlaut noch nicht erwähnt."
+  },
+  {
+    "text": "In welchem Jahr wurde das erste Pilsner Urquell gebraut?",
+    "answer": 1842,
+    "unit": "Jahr",
+    "explanation": "1842 in Pilsen. Ein historischer Meilenstein in der Biergeschichte."
+  },
+  {
+    "text": "In welchem Jahr begann das Münchner Oktoberfest?",
+    "answer": 1810,
+    "unit": "Jahr",
+    "explanation": "1810 war das Hochzeitsfest der Startschuss."
+  },
+  {
+    "text": "In welchem Jahr wurde die Brauerei Guinness in Dublin gegründet?",
+    "answer": 1759,
+    "unit": "Jahr",
+    "explanation": "Arthur Guinness unterschrieb den berühmten Pachtvertrag 1759."
+  },
+  {
+    "text": "In welchem Jahr sank die Titanic?",
+    "answer": 1912,
+    "unit": "Jahr",
+    "explanation": "1912 ging die Titanic unter. Ein Filmtitel erspart hier die Recherche."
+  },
+  {
+    "text": "In welchem Jahr wurde der Eiffelturm für das Publikum eröffnet?",
+    "answer": 1889,
+    "unit": "Jahr",
+    "explanation": "1889, anlässlich der Pariser Weltausstellung."
+  },
+  {
+    "text": "In welchem Jahr fiel die Berliner Mauer?",
+    "answer": 1989,
+    "unit": "Jahr",
+    "explanation": "1989. Die Schlagzeilen von damals sind unvergessen."
+  },
+  {
+    "text": "In welchem Jahr fand die erste bemannte Mondlandung statt?",
+    "answer": 1969,
+    "unit": "Jahr",
+    "explanation": "1969 landete Apollo 11 auf dem Mond."
+  },
+  {
+    "text": "In welchem Jahr wurde das erste iPhone vorgestellt?",
+    "answer": 2007,
+    "unit": "Jahr",
+    "explanation": "2007 stellte Steve Jobs das erste iPhone vor."
+  },
+  {
+    "text": "In welchem Jahr wurde Nintendo als Spielkartenfirma gegründet?",
+    "answer": 1889,
+    "unit": "Jahr",
+    "explanation": "Nintendo wurde 1889 gegründet – lange vor Super Mario."
+  },
+  {
+    "text": "In welchem Jahr wurde Wikipedia gestartet?",
+    "answer": 2001,
+    "unit": "Jahr",
+    "explanation": "Wikipedia startete 2001. Seitdem weiß der Familienrat verdächtig viel."
+  },
+  {
+    "text": "In welchem Jahr wurde Pluto entdeckt?",
+    "answer": 1930,
+    "unit": "Jahr",
+    "explanation": "Pluto wurde 1930 entdeckt. Die Diskussion um seinen Planetenstatus kam später."
+  },
+  {
+    "text": "In welchem Jahr wurden die ersten modernen Olympischen Spiele in Athen ausgetragen?",
+    "answer": 1896,
+    "unit": "Jahr",
+    "explanation": "1896 in Athen. Eine sportliche Schätzung ohne Liegestütze."
+  },
+  {
+    "text": "In welchem Jahr wurde Penicillin von Alexander Fleming entdeckt?",
+    "answer": 1928,
+    "unit": "Jahr",
+    "explanation": "1928 beobachtete Fleming die antibakterielle Wirkung eines Schimmelpilzes."
+  },
+  {
+    "text": "In welchem Jahr startete die erste bemannte Raumfahrt mit Juri Gagarin?",
+    "answer": 1961,
+    "unit": "Jahr",
+    "explanation": "1961 umkreiste Juri Gagarin die Erde."
+  },
+  {
+    "text": "Wie viele Erdtage dauert eine Umdrehung der Venus um ihre eigene Achse ungefähr?",
+    "answer": 243,
+    "unit": "Erdtage",
+    "explanation": "Etwa 243 Erdtage, länger als ihr Sonnenjahr."
+  },
+  {
+    "text": "Wie viele Halswirbel haben Menschen typischerweise?",
+    "answer": 7,
+    "unit": "Halswirbel",
+    "explanation": "Sieben Halswirbel – genau wie eine Giraffe."
+  },
+  {
+    "text": "Wie viele natürliche Monde hat die Venus?",
+    "answer": 0,
+    "unit": "Monde",
+    "explanation": "Keinen. Die Venus braucht offenbar keine Begleitung."
+  }
+];
   const FAMILY = [
     'Wer würde bei einer Zombie-Apokalypse zuerst versuchen, mit den Zombies zu verhandeln?',
     'Wer könnte eine Bedienungsanleitung lesen und trotzdem alles falsch zusammenbauen?',
@@ -215,111 +2396,5 @@
     'Wer würde aus Versehen seine eigene Geburtstagstorte anschneiden, bevor alle da sind?',
     'Wer würde in einer Show mit dem goldenen Bierpokal eine Dankesrede von zehn Minuten halten?'
   ];
-  // Klassischer TV-Quizmodus: pro Stufe eigene Fragen, in exakt steigender Schwierigkeit.
-  // Format: Gewinnstufe | Frage | Antwort A | B | C | D | korrekte Antwort (0-3) | Erklärung.
-  const CLASSIC_QUESTIONS = [];
-  `1|Wie viele Sekunden hat eine Minute?|60|100|24|360|0|Eine Minute hat 60 Sekunden. Das ist die Warm-up-Frage, kein TÜV-Test.
-1|Was ist die Hauptstadt von Frankreich?|Rom|Paris|Marseille|Madrid|1|Paris. Ein Baguette darf dafür leider nicht als Joker eingesetzt werden.
-1|Was benötigt eine Zimmerpflanze zum Wachsen?|Licht und Wasser|Einen Führerschein|Eine Fernbedienung|Einen Bierdeckel|0|Licht und Wasser sind eine solide Basis. Die Fernbedienung bringt eher wenig.
-1|Welcher Monat kommt direkt nach September?|August|November|Dezember|Oktober|3|Oktober folgt auf September, auch wenn der Kalender nach den Sommerferien nicht mehr mitspielt.
-1|Wie viele Spieler hat eine Fußballmannschaft normalerweise gleichzeitig auf dem Feld?|9|10|11|12|2|Elf Spieler, einschließlich Torwart.
-1|Was zeigt ein Thermometer an?|Temperatur|Luftfeuchtigkeit|Geschwindigkeit|Lautstärke|0|Thermometer messen Temperaturen.
-1|Wie heißt das Gerät, mit dem man Fotos macht?|Toaster|Kamera|Kompass|Wasserkocher|1|Eine Kamera. Die anderen Geräte haben selten einen Auslöser.
-1|Was ist 5 mal 6?|11|25|30|56|2|5 × 6 = 30. Mathematisch sauber gezapft.
-1|Welches Getränk wird traditionell aus Hopfen, Malz, Wasser und Hefe hergestellt?|Kaffee|Bier|Apfelsaft|Tomatensuppe|1|Bier. Die Tomatensuppe hätte allerdings einen gewagten Abgang.
-1|Wie viele Seiten hat ein Dreieck?|2|3|4|5|1|Drei Seiten. Es heißt nicht ohne Grund Dreieck.
-2|Wie viele Stunden haben drei volle Tage?|48|60|72|96|2|3 × 24 = 72 Stunden.
-2|In welcher Stadt steht der schiefe Turm von Pisa?|Rom|Pisa|Mailand|Venedig|1|In Pisa. Der Name hat einen gewissen Hinweischarakter.
-2|Welcher Planet wird als roter Planet bezeichnet?|Venus|Jupiter|Mars|Neptun|2|Mars wirkt durch eisenhaltigen Staub rötlich.
-2|Was ist ein Palindrom?|Ein Wort, das rückwärts gleich gelesen wird|Ein Wort ohne Vokale|Ein Name für vier Buchstaben|Ein besonders langer Satz|0|Beispiel: OTTO. Funktioniert vorwärts wie rückwärts.
-2|Wie viele Gramm sind 2,5 Kilogramm?|250|2500|25000|25|1|2,5 × 1000 = 2500 Gramm.
-2|Wie viele Schachfelder hat ein gewöhnliches Schachbrett?|32|48|64|81|2|8 × 8 = 64 Felder.
-2|Was ist ein anderes Wort für das Ergebnis einer Division?|Produkt|Differenz|Summe|Quotient|3|Der Quotient ist das Ergebnis einer Division.
-2|Welcher dieser Stoffe ist bei Raumtemperatur gewöhnlich gasförmig?|Eisen|Sauerstoff|Speisesalz|Zucker|1|Sauerstoff ist unter normalen Raumbedingungen ein Gas.
-2|Welche Himmelsrichtung liegt rechts, wenn du nach Norden blickst?|Westen|Süden|Osten|Nordwesten|2|Rechts von Norden ist Osten.
-2|Wie viele Minuten sind zweieinhalb Stunden?|125|130|150|180|2|2,5 × 60 = 150 Minuten.
-3|Wie viele Bundesländer hat Deutschland?|14|15|16|17|2|Deutschland hat 16 Bundesländer.
-3|Welches chemische Symbol steht für Gold?|Ag|Au|Fe|Go|1|Au stammt vom lateinischen aurum.
-3|Welcher dieser Tiere gehört zu den Säugetieren?|Pinguin|Delfin|Krokodil|Forelle|1|Delfine sind Säugetiere und müssen Luft holen.
-3|Wenn du in einem Rennen den Zweiten überholst, auf welchem Platz bist du?|Erster|Zweiter|Dritter|Letzter|1|Du nimmst den Platz des Zweiten ein. Nicht den des Ersten.
-3|Was ist 15 Prozent von 200?|15|20|30|35|2|0,15 × 200 = 30.
-3|Wie heißt die Einheit des elektrischen Widerstands?|Volt|Watt|Ohm|Ampere|2|Der elektrische Widerstand wird in Ohm gemessen.
-3|Wofür steht die Abkürzung WWW?|World Wide Web|World Word Work|Wide Web World|World Wired Way|0|World Wide Web. Keine Geheimsprache der Quizleitung.
-3|Welche dieser Zahlen ist eine Primzahl?|21|27|29|33|2|29 ist nur durch 1 und 29 ohne Rest teilbar.
-3|Was ist eine Dekade?|Ein Jahrhundert|Ein Jahrzehnt|Ein Monat|Ein Jahrtausend|1|Eine Dekade umfasst zehn Jahre.
-3|Was bedeutet „untergärig“ beim Bier?|Bier wird unterirdisch gelagert|Die Hefe gärt bei relativ niedrigen Temperaturen|Die Flasche liegt unten|Das Bier hat keinen Schaum|1|Untergärige Hefen werden typischerweise bei niedrigeren Temperaturen eingesetzt.
-4|Welcher Stoff hat die chemische Formel CO₂?|Kohlenstoffmonoxid|Kohlendioxid|Sauerstoff|Methan|1|CO₂ besteht aus einem Kohlenstoff- und zwei Sauerstoffatomen.
-4|Ein Zug fährt 90 km in 60 Minuten. Wie weit kommt er bei gleichbleibendem Tempo in 20 Minuten?|20 km|25 km|30 km|45 km|2|20 Minuten sind ein Drittel einer Stunde, also 30 km.
-4|Was ist der größte Ozean der Erde?|Atlantik|Indischer Ozean|Pazifik|Arktischer Ozean|2|Der Pazifik hat die größte Fläche.
-4|Welche Zahl setzt die Reihe fort: 2, 4, 8, 16, ...?|20|24|30|32|3|Jede Zahl wird verdoppelt. Danach kommt 32.
-4|Worin liegt der Unterschied zwischen einem Kilobyte und einem Kilogramm?|Beide messen Masse|Eines misst Datenmenge, das andere Masse|Beide messen Temperatur|Es gibt keinen|1|Byte und Gramm messen ganz verschiedene Größen.
-4|Welche der folgenden Städte liegt an der Donau?|Hamburg|Regensburg|Hannover|Wuppertal|1|Die Donau fließt durch Regensburg.
-4|Womit misst man den Luftdruck?|Barometer|Thermometer|Hygrometer|Tachometer|0|Das Barometer ist das Messgerät für Luftdruck.
-4|Wie viele mögliche Ergebnisse hat der Wurf zweier idealer Münzen, wenn die Reihenfolge zählt?|2|3|4|6|2|Kopf/Kopf, Kopf/Zahl, Zahl/Kopf, Zahl/Zahl – vier Kombinationen.
-4|Wie heißt das Filtern der Würze vom Treber beim Bierbrauen?|Läutern|Destillieren|Pasteurisieren|Karbonisieren|0|Beim Läutern werden feste Maischereste und flüssige Würze getrennt.
-4|Ein Liter Wasser und ein Liter Bier: Welches Volumen ist größer?|Wasser|Bier|Beide gleich|Abhängig von der Glasform|2|Ein Liter bleibt ein Liter. Es geht um Volumen, nicht Gewicht.
-5|Wie viel ist 3 hoch 4?|12|27|64|81|3|3 × 3 × 3 × 3 = 81.
-5|Welches dieser Elemente hat die Ordnungszahl 1?|Sauerstoff|Wasserstoff|Helium|Kohlenstoff|1|Wasserstoff steht ganz vorne im Periodensystem.
-5|Welcher Begriff bezeichnet in der Statistik den mittleren Wert einer sortierten Liste?|Varianz|Median|Modus|Standardabweichung|1|Der Median teilt die sortierten Werte in zwei Hälften.
-5|Drei Geschwister haben zusammen 48 Jahre. Wie alt sind sie zusammen in zehn Jahren?|58|68|78|108|2|Drei Personen werden jeweils zehn Jahre älter, also 48 + 30 = 78.
-5|Wie viele Milliliter sind 0,075 Liter?|7,5|75|750|7500|1|0,075 × 1000 = 75 ml.
-5|Was beschreibt die Stammwürze beim Brauen?|Alkoholgehalt des fertigen Biers|Anteil gelöster Stoffe vor der Gärung|Alter der Brauerei|Die Farbe des Malzes|1|Stammwürze gibt Auskunft über die gelösten Extraktstoffe in der Würze.
-5|Du wirfst einen fairen Würfel zweimal. Wie groß ist die Wahrscheinlichkeit für zweimal die Sechs?|1/6|1/12|1/36|1/18|2|Die beiden unabhängigen Wahrscheinlichkeiten werden multipliziert: 1/6 × 1/6 = 1/36.
-5|Welche dieser Mengenangaben ist die größte?|0,4 Liter|350 ml|4 dl|450 ml|3|450 ml schlägt 400 ml und 350 ml.
-5|Welche Zahl ist das Ergebnis von 2³ + 3²?|13|17|25|36|1|8 + 9 = 17.
-5|Wie viele verschiedene zweistellige Zahlen lassen sich aus 1, 2 und 3 ohne Wiederholung bilden?|3|6|9|12|1|3 Möglichkeiten für die Zehnerstelle und 2 für die Einerstelle: 6.
-6|Ein Preis steigt erst um 20 Prozent und fällt dann um 20 Prozent. Wie ändert sich der Preis insgesamt?|Er bleibt gleich|Er fällt um 4 Prozent|Er steigt um 4 Prozent|Er fällt um 20 Prozent|1|1,2 × 0,8 = 0,96, also 4 Prozent weniger.
-6|Welcher pH-Wert ist bei 25 °C neutral?|0|5|7|14|2|Neutral bedeutet bei 25 °C pH 7.
-6|Welche Zahl fehlt: 1, 1, 2, 3, 5, 8, ...?|11|12|13|16|2|Die Fibonacci-Folge addiert jeweils die beiden letzten Zahlen.
-6|Wenn vier Maschinen vier Teile in vier Minuten produzieren, wie lange brauchen acht gleichartige Maschinen für acht Teile?|2 Minuten|4 Minuten|8 Minuten|16 Minuten|1|Jede Maschine macht ein Teil in vier Minuten. Acht Maschinen schaffen acht Teile ebenfalls in vier Minuten.
-6|Ein Fass enthält 40 Liter. Du entnimmst 25 Prozent des Inhalts. Wie viele Liter bleiben übrig?|10|15|25|30|3|Ein Viertel von 40 sind 10. Es bleiben 30 Liter.
-6|Bei einem normalen Kartenspiel mit 52 Karten: Wie viele Könige gibt es?|2|3|4|8|2|Es gibt einen König je Farbe, also vier.
-6|Welches dieser Bier-Verfahren kann zusätzliche Hopfenaromen bringen, ohne dass dabei gekocht wird?|Kalthopfung|Schockfrosten|Entsalzen|Entkoffeinieren|0|Beim Dry Hopping wird Hopfen nach dem Kochen zugegeben.
-6|Was ist die Quadratwurzel aus 0,0009?|0,003|0,03|0,3|3|1|0,03 × 0,03 = 0,0009.
-6|Eine Uhr zeigt 15:45. Wie viele Minuten sind es bis 18:10?|125|135|145|155|2|Von 15:45 bis 18:00 sind es 135 Minuten, plus zehn = 145.
-6|Ein fairer Würfel wird einmal geworfen. Wie groß ist die Chance für eine gerade Zahl?|1/6|1/3|1/2|2/3|2|2, 4 und 6 sind drei von sechs gleichwahrscheinlichen Ergebnissen.
-7|Welches Ergebnis hat 7! (sieben Fakultät)?|720|2520|5040|10080|2|7! = 7 × 6 × 5 × 4 × 3 × 2 × 1 = 5040.
-7|Welche Zahl erfüllt 3x + 7 = 31?|6|7|8|9|2|3x = 24, also x = 8.
-7|Ein fairer Würfel wird zweimal geworfen. Wie wahrscheinlich ist mindestens eine Sechs?|1/6|11/36|1/3|5/18|1|Gegenwahrscheinlichkeit: 1 − (5/6)² = 11/36.
-7|Welche Aussage über Licht im Vakuum ist korrekt?|Es braucht Luft|Seine Geschwindigkeit beträgt ungefähr 300.000 km/s|Es ist langsamer als Schall|Es hat keine Ausbreitungsgeschwindigkeit|1|Im Vakuum bewegt sich Licht mit etwa 299.792 km/s.
-7|Wie viele verschiedene Anordnungen haben die drei Buchstaben A, B und C?|3|6|9|12|1|3! = 6 unterschiedliche Anordnungen.
-7|Ein Würfel hat die Kantenlänge 3 cm. Welches Volumen hat er?|9 cm³|18 cm³|27 cm³|36 cm³|2|3³ = 27 Kubikzentimeter.
-7|Was passiert mit der Häufigkeit einer Note, wenn sich ihre Frequenz verdoppelt?|Sie wird eine Oktave höher|Sie wird eine Oktave tiefer|Sie wird doppelt so laut|Sie bleibt gleich|0|Eine Frequenzverdopplung entspricht einer Oktave.
-7|Du hast zwei exakt gleich schwere Kisten. Eine steht aufrecht, eine liegt flach. Was ist gleich?|Ihre Gewichtskraft|Ihre Grundfläche|Ihre Höhe|Ihr Druck auf den Boden|0|Die Gewichtskraft ist gleich, der Druck kann sich wegen der Kontaktfläche ändern.
-7|Ein Rabatt von 25 Prozent senkt den Preis auf 60 Euro. Was kostete der Artikel vorher?|70 €|75 €|80 €|85 €|2|60 Euro entsprechen 75 Prozent des ursprünglichen Preises. 60/0,75 = 80.
-7|Welches dieser Wörter ist kein Anagramm von „AMPEL“?|PALME|LAMPE|MALPE|PALMEN|3|PALMEN hat sechs Buchstaben. Die anderen verwenden dieselben fünf Buchstaben.
-8|Wie viele Minuten sind genau 1,5 Tage?|1440|1800|2160|2880|2|1,5 × 24 × 60 = 2160 Minuten.
-8|Ein Bakterienstamm verdoppelt sich jede Stunde. Nach 8 Stunden ist ein Gefäß voll. Wann war es halbvoll?|Nach 2 Stunden|Nach 4 Stunden|Nach 6 Stunden|Nach 7 Stunden|3|Bei Verdopplung ist es genau eine Stunde vorher halbvoll.
-8|Welcher dieser Brüche ist am größten?|5/12|7/16|3/7|4/9|3|4/9 ist etwa 0,444; die anderen liegen darunter.
-8|Wie viele eindeutige Händedrucke gibt es, wenn sich sechs Personen einmal gegenseitig die Hand geben?|12|15|18|30|1|Es gibt 6 × 5 / 2 = 15 Paare.
-8|Ein Passwort enthält genau drei Ziffern von 0 bis 9, Wiederholungen erlaubt. Wie viele Passwörter gibt es?|30|100|900|1000|3|Für jede Stelle gibt es 10 Optionen: 10³ = 1000. 000 zählt als Passwort.
-8|Welche Aussage zur Wahrscheinlichkeit ist richtig?|Zwei unabhängige faire Münzwürfe ergeben immer einmal Kopf|P(Kopf und Kopf) ist 1/4|P(Kopf und Kopf) ist 1/2|Nach Kopf muss Zahl kommen|1|Alle vier Ausgänge sind gleich wahrscheinlich, Kopf/Kopf ist einer davon.
-8|Wenn ein Rezept für 5 Liter 400 g Malz braucht, wie viel braucht es proportional für 13 Liter?|780 g|920 g|1040 g|1200 g|2|400 × 13/5 = 1040 Gramm.
-8|Welche dieser Zahlen ist durch 9 teilbar?|8271|8272|8273|8274|0|8 + 2 + 7 + 1 = 18. Die Quersumme ist durch 9 teilbar.
-8|Ein Quadrat hat eine Diagonale von 10 cm. Wie groß ist seine Fläche?|25 cm²|50 cm²|75 cm²|100 cm²|1|Die Fläche ist Diagonale²/2 = 100/2 = 50 cm².
-8|In einer Familie hat jedes von vier Kindern genau drei Geschwister. Wie viele Kinder gibt es?|4|8|12|16|0|Es sind dieselben vier Kinder: Jedes hat die anderen drei als Geschwister.
-9|Wie viele verschiedene fünfstellige PINs gibt es, wenn jede Ziffer verschieden sein muss und 0 vorne erlaubt ist?|15.120|30.240|60.480|100.000|1|10 × 9 × 8 × 7 × 6 = 30.240 mögliche PINs.
-9|Eine Zahl wird durch 5 geteilt und liefert Rest 3. Welchen Rest liefert ihr Doppeltes bei Division durch 5?|0|1|2|3|1|2 × 3 = 6. Bei Division durch 5 bleibt Rest 1.
-9|Für welchen Wert von x gilt 2^(x+1) = 64?|4|5|6|7|1|64 = 2⁶. Also x + 1 = 6 und x = 5.
-9|Wie viele verschiedene Diagonalen hat ein regelmäßiges Achteck?|16|18|20|24|2|n(n−3)/2 ergibt 8 × 5 / 2 = 20 Diagonalen.
-9|Welchen Mittelwert haben die Zahlen 2, 4, 6, 8, 10, 12?|6|7|8|9|1|Die Summe beträgt 42. Durch 6 geteilt ergibt das 7.
-9|Ein Würfel wird dreimal geworfen. Wie groß ist die Wahrscheinlichkeit, keine Sechs zu werfen?|25/36|125/216|5/18|1/2|1|(5/6)³ = 125/216. Die Sechs hält sich hier drei Würfe lang zurück.
-9|Ein Bierfass ist zu 3/5 gefüllt. Du entnimmst 1/3 des vorhandenen Inhalts. Welcher Anteil des ganzen Fasses bleibt?|1/5|2/5|3/10|4/5|1|3/5 × 2/3 = 2/5 des ganzen Fasses.
-9|Wie viele unterschiedliche dreistellige Zahlen kann man aus den Ziffern 0, 1, 2, 3 bilden, ohne eine Ziffer doppelt zu verwenden?|12|18|24|36|1|Hunderterstelle: 3 Optionen; dann 3 und 2, insgesamt 18.
-9|Du hast 100 € und verlierst nacheinander 10 % und 10 % des jeweils aktuellen Betrags. Wie viel bleibt?|80 €|81 €|82 €|90 €|1|100 × 0,9 × 0,9 = 81 Euro.
-9|Was ist das kleinste gemeinsame Vielfache von 12 und 18?|24|30|36|72|2|36 ist das kleinste positive Vielfache beider Zahlen.
-10|Wie viele Möglichkeiten gibt es, aus acht verschiedenen Personen genau drei für ein Team auszuwählen, ohne Rollen?|24|56|112|336|1|8 über 3 = 8 × 7 × 6 / (3 × 2 × 1) = 56.
-10|Eine Uhr geht pro Stunde 4 Minuten nach. Sie wird um 12:00 richtig gestellt. Welche Zeit zeigt sie nach 6 echten Stunden?|17:24|17:36|18:24|18:00|1|Sechs Stunden × vier Minuten = 24 Minuten Rückstand. Anzeige: 17:36.
-10|Eine faire Münze wird fünfmal geworfen. Wie wahrscheinlich sind genau drei Köpfe?|5/32|10/32|15/32|1/2|1|Es gibt 5 über 3 = 10 passende Folgen unter 2⁵ = 32 Folgen.
-10|Welche Zahl ist die kleinste positive Zahl, die sowohl durch 6, 8 als auch 15 teilbar ist?|60|90|120|240|2|Das kleinste gemeinsame Vielfache von 6, 8 und 15 ist 120.
-10|Ein Sack enthält vier rote und vier blaue Kugeln. Du ziehst ohne Zurücklegen drei Stück. Wie wahrscheinlich sind alle rot?|1/7|1/14|1/8|3/28|1|(4/8) × (3/7) × (2/6) = 1/14.
-10|Ein Würfel mit Kantenlänge 4 cm wird vollständig in Würfel von 1 cm Kante geteilt. Wie viele kleine Würfel liegen innen ohne Außenfläche?|4|8|16|24|1|Nur die inneren 2 × 2 × 2 Würfel berühren keine Außenfläche. Das sind 8.
-10|Ein Gast trinkt 2/3 seines Getränks, danach 1/2 des Restes. Welcher Anteil des ursprünglichen Getränks ist noch da?|1/3|1/4|1/6|1/9|2|Nach dem ersten Schluck bleibt 1/3, davon die Hälfte = 1/6.
-10|Wie viele sechsstellige Folgen aus den Ziffern 0 und 1 enthalten genau zwei Einsen?|12|15|20|30|1|Die Positionen der zwei Einsen wählt man aus sechs Stellen: 6 über 2 = 15.
-10|Welche Ziffer steht an der Einerstelle von 7^2026?|1|3|7|9|3|Die Endziffern laufen im Zyklus 7, 9, 3, 1. 2026 hat Rest 2 bei Division durch 4, also 9.
-10|Drei Personen sind unterschiedlich groß. In wie vielen Reihenfolgen können sie sich ohne weitere Vorgaben aufstellen?|3|6|9|12|1|3! = 6. Sogar die Familie bekommt eine eindeutige Reihenfolge hin – theoretisch.`.trim().split('\n').forEach(line => {
-    const [level,text,a,b,c,d,correct,explanation] = line.split('|').map(x=>x.trim());
-    CLASSIC_QUESTIONS.push({level:Number(level),category:Number(level)>=7?'Knallharte Knobelei':Number(level)>=4?'Wissen & absurde Logik':'Warm-up & Allgemeinwissen',difficulty:Math.min(3,Math.ceil(Number(level)/4)),text,options:[a,b,c,d],correct:Number(correct),explanation});
-  });
-  window.BIER_DATA = Object.freeze({ QUESTIONS, CLASSIC_QUESTIONS, ESTIMATES, FAMILY });
+  window.BIER_DATA = Object.freeze({QUESTIONS, CLASSIC_QUESTIONS, ESTIMATES, FAMILY});
 })();
