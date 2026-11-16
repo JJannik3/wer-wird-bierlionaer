@@ -1,14 +1,14 @@
 # 🍺 WER WIRD BIERLIONÄR?
 
-Eine komplett lokal laufende, moderierte Familien-Quizshow mit Glücksrad, 144 Multiple-Choice-Fragen, 8 Jokern, 4 Spielmodi, Chaos-Ereignissen, Familien-Challenges, Live-Ranking, Schätzfinale, goldener Bier-Trophäe und geheimem Braukurs-Gutschein.
+Eine komplett lokal laufende, moderierte Familien-Quizshow mit Glücksrad, 244 Multiple-Choice-Fragen (davon 100 nur für die steigende Klassik-Gewinnleiter), 8 Jokern, 4 Spielmodi, Chaos-Ereignissen, Familien-Challenges, Live-Ranking, Schätzfinale, goldener Bier-Trophäe und geheimem Braukurs-Gutschein.
 
 **Keine Installation, kein Konto, keine Datenbank und kein Framework nötig.** Alle Dateien liegen direkt im Verzeichnis.
 
-## In 5 Minuten über GitHub Pages veröffentlichen
+## Auf GitHub Pages veröffentlichen oder das vorhandene Spiel aktualisieren
 
 1. Öffne https://github.com/new und lege ein **öffentliches** Repository namens `wer-wird-bierlionaer` an. Als Hauptbranch `main` verwenden.
-2. Öffne das Repository und wähle **Add file → Upload files**. Lade diese Dateien **entpackt** gemeinsam hoch: `index.html`, `style.css`, `app.js`, `questions.js`, `.nojekyll` und `README.md`. Wichtig: alle im obersten Verzeichnis, nicht in einem Unterordner.
-3. Klicke auf **Commit changes**.
+2. Öffne das Repository und wähle **Add file → Upload files**. Lade diese Dateien **entpackt** gemeinsam hoch (bei einem bestehenden Repository werden die gleichnamigen Dateien mit den neuen Versionen überschrieben): `index.html`, `style.css`, `app.js`, `questions.js`, `.nojekyll` und `README.md`. Wichtig: alle im obersten Verzeichnis, nicht in einem Unterordner.
+3. Klicke auf **Commit changes**. **Bei einer Aktualisierung** brauchst du GitHub Pages NICHT erneut zu aktivieren. Lade nach der Veröffentlichung die Spielseite mit **Strg+F5** (Windows) oder **Cmd+Shift+R** (Mac) neu.
 4. Öffne **Settings → Pages → Build and deployment**.
 5. Stelle **Source: Deploy from a branch**, **Branch: main** und **Folder: /(root)** ein, dann **Save**.
 6. Die veröffentlichte Adresse folgt normalerweise dem Muster `https://DEIN-GITHUB-NAME.github.io/wer-wird-bierlionaer/`. Den endgültigen Link findest du auch bei **Settings → Pages → Visit site**.
@@ -22,18 +22,20 @@ Hinweis: GitHub Pages ist ein statisches Hosting-Angebot. Die Website benötigt 
 - Auf **SHOW STARTEN** klicken.
 - Alle Personen mit Vornamen anmelden. Das **🎂-Symbol** neben dem Bruder anklicken, um ihn als Geburtstagskind zu markieren.
 - Modus wählen. Für besonders viele absurde Regeln eignet sich **Vollrausch-Chaos**. Wenn dein Bruder das Finale auf jeden Fall spielen soll, nimm **Geburtstags-Special**.
-- Die Rundenanzahl wählen. **3 Fragen pro Person** sind für einen ersten Probelauf am sinnvollsten, **5** für den normalen Familienabend.
+- Klassik: **6, 8 oder 10 Stufen** pro Kandidat wählen. Jeder spielt die komplette Leiter, bevor der Nächste drankommt. Die Wahl **8 Stufen** ist für eine Familienrunde gut. Die anderen Modi spielen weiterhin **3, 5 oder 7 Runden** pro Person.
 - Am Glücksrad drehen, Show starten, Fragen laut vorlesen. Du klickst als Moderator Antworten, Joker und Ereignisse an.
 - Für die dramatische Schätzfrage am Ende darf jede Finalperson zunächst eine Schätzung sagen oder verdeckt auf einen Zettel schreiben. Trage die Schätzungen ein, enthülle die Lösung und starte die Siegerehrung.
 - Gewinner erhält in echt ein Bier (ein alkoholfreies Getränk geht natürlich genauso). Den **versteckten Braukurs-Gutschein** kannst du danach erst mit dem großen Überraschungsknopf enthüllen und per Browser drucken.
 
 ## Die Spielregeln
 
-**Punkte:** einfache Fragen +100 BP, mittlere +150 BP, schwere +200 BP. Falsche Antwort: bis zu −50 BP; Punktestände fallen nicht unter null. Ein Zusatzjoker oder Chaos-Ereignis kann diese Werte ändern.
+**Klassische Gewinnleiter:** Jeder Kandidat beginnt bei 0 und spielt mehrere Fragen direkt nacheinander. Die Leiter hat je nach Einstellung 6, 8 oder 10 Stufen, mit den Bierpunktwerten 100, 200, 300, 500, 1.000, 2.000, 4.000, 8.000, 16.000 und 32.000. Die Stufen 3 und 6 sind Sicherheitsstufen. Wer falsch antwortet, scheidet für diese Partie aus und behält den zuletzt erreichten Sicherheitswert (ohne Sicherheitsstufe 0). Wer freiwillig aussteigt, behält den aktuellen Wert. Wer es ganz nach oben schafft, gewinnt 2.000, 8.000 oder 32.000 BP (abhängig von der eingestellten Leiterhöhe). Die höchste gesicherte Punktzahl gewinnt; Gleichstand an der Spitze wird mit einer Schätzfrage entschieden.
 
-**Fragen:** Die Fragen werden zufällig gezogen und innerhalb derselben Partie nicht erneut gestellt, solange der Pool ausreicht. Schwierigkeit steigt im Verlauf grob an.
+**Andere Modi:** Einfache Fragen +100 BP, mittlere +150 BP, schwere +200 BP. Falsche Antwort: bis zu −50 BP; Punktestände fallen nicht unter null. Ein Zusatzjoker oder Chaos-Ereignis kann diese Werte ändern.
 
-**Joker:** Alle Teilnehmenden erhalten zufällig zwei Joker am Spielanfang. Jeder Joker ist einmal einsetzbar. Pro Frage darf maximal einer eingesetzt werden. Auch der Moderator erhält eine Beschreibung der Wirkung auf dem Bildschirm.
+**Fragen:** Klassik erhält **100 neue Fragen auf genau 10 ansteigenden Schwierigkeitsstufen**: leichte Einstiegsfragen, kniffliges Allgemeinwissen und zunehmend unangenehme Logik-/Quatschfragen. Jede Person erhält andere Fragen derselben Stufe; wenn ein Stufenpool vollständig verbraucht wäre, kann erst dann eine Frage wiederkehren. Die übrigen Modi verwenden wie bisher den gemischten Pool mit 144 Fragen.
+
+**Joker:** In den drei bisherigen Modi erhalten alle Teilnehmenden zufällig zwei Joker am Spielanfang. Im Klassikmodus starten alle fair mit drei Jokern: dem 50:50-Joker, einem Familienhilfe-Joker und einem zufälligen Chaos-Joker. Jeder Joker ist einmal einsetzbar. Pro Frage darf maximal einer eingesetzt werden. Auch der Moderator erhält eine Beschreibung der Wirkung auf dem Bildschirm.
 
 - 🧠 Gehirnzellen-Leihgabe: Ein Familienmitglied darf laut helfen.
 - 😈 Der Saboteur: Ein Spieler ist bei seinem nächsten regulären Zug ohne Joker.
@@ -52,7 +54,7 @@ Hinweis: GitHub Pages ist ein statisches Hosting-Angebot. Die Website benötigt 
 
 **Geburtstags-Special:** Das Geburtstagskind wird auch dann ins Finale aufgenommen, wenn es in der Vorrunde nicht zu den Top 3 gehört. Im Finale gewinnt trotzdem die beste Schätzung.
 
-**Finale:** Die besten drei (oder bei weniger Spielern alle) geben eine Schätzung ab. Im Geburtstagsmodus ist das Geburtstagskind dabei. Die kleinste absolute Abweichung zur korrekten Zahl gewinnt. Bei gleichem Abstand entscheidet der Punktestand vor dem Finale.
+**Finale (die anderen Modi):** Die besten drei (oder bei weniger Spielern alle) geben eine Schätzung ab. Im Geburtstagsmodus ist das Geburtstagskind dabei. Die kleinste absolute Abweichung zur korrekten Zahl gewinnt. Bei gleichem Abstand entscheidet der Punktestand vor dem Finale.
 
 ## Fragen bearbeiten oder ergänzen
 
@@ -66,7 +68,7 @@ Beispiel:
 
 Setze die Zeile in einer der `add('Kategorie', \` ... \`)`-Gruppen ein. Achte darauf, kein `|` innerhalb der Texte zu verwenden.
 
-Schätzfragen und Familien-Challenges stehen am Ende derselben Datei in `ESTIMATES` und `FAMILY`.
+Die Klassikfragen stehen in `questions.js` in `CLASSIC_QUESTIONS`, sortiert nach den Stufen 1 bis 10. Schätzfragen und Familien-Challenges stehen in derselben Datei in `ESTIMATES` und `FAMILY`.
 
 ## Technisches & Hinweise
 
@@ -84,3 +86,11 @@ Schätzfragen und Familien-Challenges stehen am Ende derselben Datei in `ESTIMAT
 **Beachte:** Die Website ist bewusst ein **Ein-Bildschirm-Spiel**, keine separate Teilnahme-App mit Smartphones. Der Moderator bedient alles; die Familie schaut gemeinsam zu und antwortet laut. Die Fragen sind Unterhaltung, kein wissenschaftliches Fachquiz.
 
 **Keine Abhängigkeiten:** Die vier Programmdateien funktionieren auch offline. Für die Nutzung ohne GitHub Pages kannst du `index.html` direkt im Browser öffnen; falls der Browser lokale Skripte einschränkt, ist GitHub Pages die einfachere Variante.
+
+## Version 2 – Änderungen gegenüber dem ersten Bierlionär
+
+- Klassikmodus ist jetzt eine echte Einzelkandidaten-Quizshow mit 6/8/10-Stufen-Gewinnleiter, Sicherheitsstufen, Ausstieg, Kandidatenwechsel und Stichfrage bei Gleichstand.
+- 100 neue Fragen für die Klassikleiter, mit kniffligem Wissen und teilweise absurden Logikrätseln.
+- Ruhigeres, klareres Design und eine große Gewinnleiter direkt neben der Frage.
+- Die anderen drei Modi haben ihre bisherigen Regeln und ihr Schätzfinale behalten.
+- Alle Spielstände werden lokal im Browser gespeichert. Bei der Aktualisierung werden vorhandene Namen nach Möglichkeit übernommen; ein begonnenes Spiel aus der alten Version wird aus Sicherheitsgründen nicht unverändert fortgesetzt.

@@ -1,4 +1,4 @@
-/* Fragenpool: 140 einzigartige Multiple-Choice-Fragen, 18 Schätzfinals und Familien-Challenges.
+/* Fragenpool: 144 reguläre und 100 nach Stufe sortierte Klassik-Fragen, 18 Schätzfinals und Familien-Challenges.
    Format: Schwierigkeit | Frage | A | B | C | D | korrekte Antwort (0-3) | Erklärung
    Du kannst jederzeit Fragen hinzufügen oder ändern. */
 (() => {
@@ -215,5 +215,111 @@
     'Wer würde aus Versehen seine eigene Geburtstagstorte anschneiden, bevor alle da sind?',
     'Wer würde in einer Show mit dem goldenen Bierpokal eine Dankesrede von zehn Minuten halten?'
   ];
-  window.BIER_DATA = Object.freeze({ QUESTIONS, ESTIMATES, FAMILY });
+  // Klassischer TV-Quizmodus: pro Stufe eigene Fragen, in exakt steigender Schwierigkeit.
+  // Format: Gewinnstufe | Frage | Antwort A | B | C | D | korrekte Antwort (0-3) | Erklärung.
+  const CLASSIC_QUESTIONS = [];
+  `1|Wie viele Sekunden hat eine Minute?|60|100|24|360|0|Eine Minute hat 60 Sekunden. Das ist die Warm-up-Frage, kein TÜV-Test.
+1|Was ist die Hauptstadt von Frankreich?|Rom|Paris|Marseille|Madrid|1|Paris. Ein Baguette darf dafür leider nicht als Joker eingesetzt werden.
+1|Was benötigt eine Zimmerpflanze zum Wachsen?|Licht und Wasser|Einen Führerschein|Eine Fernbedienung|Einen Bierdeckel|0|Licht und Wasser sind eine solide Basis. Die Fernbedienung bringt eher wenig.
+1|Welcher Monat kommt direkt nach September?|August|November|Dezember|Oktober|3|Oktober folgt auf September, auch wenn der Kalender nach den Sommerferien nicht mehr mitspielt.
+1|Wie viele Spieler hat eine Fußballmannschaft normalerweise gleichzeitig auf dem Feld?|9|10|11|12|2|Elf Spieler, einschließlich Torwart.
+1|Was zeigt ein Thermometer an?|Temperatur|Luftfeuchtigkeit|Geschwindigkeit|Lautstärke|0|Thermometer messen Temperaturen.
+1|Wie heißt das Gerät, mit dem man Fotos macht?|Toaster|Kamera|Kompass|Wasserkocher|1|Eine Kamera. Die anderen Geräte haben selten einen Auslöser.
+1|Was ist 5 mal 6?|11|25|30|56|2|5 × 6 = 30. Mathematisch sauber gezapft.
+1|Welches Getränk wird traditionell aus Hopfen, Malz, Wasser und Hefe hergestellt?|Kaffee|Bier|Apfelsaft|Tomatensuppe|1|Bier. Die Tomatensuppe hätte allerdings einen gewagten Abgang.
+1|Wie viele Seiten hat ein Dreieck?|2|3|4|5|1|Drei Seiten. Es heißt nicht ohne Grund Dreieck.
+2|Wie viele Stunden haben drei volle Tage?|48|60|72|96|2|3 × 24 = 72 Stunden.
+2|In welcher Stadt steht der schiefe Turm von Pisa?|Rom|Pisa|Mailand|Venedig|1|In Pisa. Der Name hat einen gewissen Hinweischarakter.
+2|Welcher Planet wird als roter Planet bezeichnet?|Venus|Jupiter|Mars|Neptun|2|Mars wirkt durch eisenhaltigen Staub rötlich.
+2|Was ist ein Palindrom?|Ein Wort, das rückwärts gleich gelesen wird|Ein Wort ohne Vokale|Ein Name für vier Buchstaben|Ein besonders langer Satz|0|Beispiel: OTTO. Funktioniert vorwärts wie rückwärts.
+2|Wie viele Gramm sind 2,5 Kilogramm?|250|2500|25000|25|1|2,5 × 1000 = 2500 Gramm.
+2|Wie viele Schachfelder hat ein gewöhnliches Schachbrett?|32|48|64|81|2|8 × 8 = 64 Felder.
+2|Was ist ein anderes Wort für das Ergebnis einer Division?|Produkt|Differenz|Summe|Quotient|3|Der Quotient ist das Ergebnis einer Division.
+2|Welcher dieser Stoffe ist bei Raumtemperatur gewöhnlich gasförmig?|Eisen|Sauerstoff|Speisesalz|Zucker|1|Sauerstoff ist unter normalen Raumbedingungen ein Gas.
+2|Welche Himmelsrichtung liegt rechts, wenn du nach Norden blickst?|Westen|Süden|Osten|Nordwesten|2|Rechts von Norden ist Osten.
+2|Wie viele Minuten sind zweieinhalb Stunden?|125|130|150|180|2|2,5 × 60 = 150 Minuten.
+3|Wie viele Bundesländer hat Deutschland?|14|15|16|17|2|Deutschland hat 16 Bundesländer.
+3|Welches chemische Symbol steht für Gold?|Ag|Au|Fe|Go|1|Au stammt vom lateinischen aurum.
+3|Welcher dieser Tiere gehört zu den Säugetieren?|Pinguin|Delfin|Krokodil|Forelle|1|Delfine sind Säugetiere und müssen Luft holen.
+3|Wenn du in einem Rennen den Zweiten überholst, auf welchem Platz bist du?|Erster|Zweiter|Dritter|Letzter|1|Du nimmst den Platz des Zweiten ein. Nicht den des Ersten.
+3|Was ist 15 Prozent von 200?|15|20|30|35|2|0,15 × 200 = 30.
+3|Wie heißt die Einheit des elektrischen Widerstands?|Volt|Watt|Ohm|Ampere|2|Der elektrische Widerstand wird in Ohm gemessen.
+3|Wofür steht die Abkürzung WWW?|World Wide Web|World Word Work|Wide Web World|World Wired Way|0|World Wide Web. Keine Geheimsprache der Quizleitung.
+3|Welche dieser Zahlen ist eine Primzahl?|21|27|29|33|2|29 ist nur durch 1 und 29 ohne Rest teilbar.
+3|Was ist eine Dekade?|Ein Jahrhundert|Ein Jahrzehnt|Ein Monat|Ein Jahrtausend|1|Eine Dekade umfasst zehn Jahre.
+3|Was bedeutet „untergärig“ beim Bier?|Bier wird unterirdisch gelagert|Die Hefe gärt bei relativ niedrigen Temperaturen|Die Flasche liegt unten|Das Bier hat keinen Schaum|1|Untergärige Hefen werden typischerweise bei niedrigeren Temperaturen eingesetzt.
+4|Welcher Stoff hat die chemische Formel CO₂?|Kohlenstoffmonoxid|Kohlendioxid|Sauerstoff|Methan|1|CO₂ besteht aus einem Kohlenstoff- und zwei Sauerstoffatomen.
+4|Ein Zug fährt 90 km in 60 Minuten. Wie weit kommt er bei gleichbleibendem Tempo in 20 Minuten?|20 km|25 km|30 km|45 km|2|20 Minuten sind ein Drittel einer Stunde, also 30 km.
+4|Was ist der größte Ozean der Erde?|Atlantik|Indischer Ozean|Pazifik|Arktischer Ozean|2|Der Pazifik hat die größte Fläche.
+4|Welche Zahl setzt die Reihe fort: 2, 4, 8, 16, ...?|20|24|30|32|3|Jede Zahl wird verdoppelt. Danach kommt 32.
+4|Worin liegt der Unterschied zwischen einem Kilobyte und einem Kilogramm?|Beide messen Masse|Eines misst Datenmenge, das andere Masse|Beide messen Temperatur|Es gibt keinen|1|Byte und Gramm messen ganz verschiedene Größen.
+4|Welche der folgenden Städte liegt an der Donau?|Hamburg|Regensburg|Hannover|Wuppertal|1|Die Donau fließt durch Regensburg.
+4|Womit misst man den Luftdruck?|Barometer|Thermometer|Hygrometer|Tachometer|0|Das Barometer ist das Messgerät für Luftdruck.
+4|Wie viele mögliche Ergebnisse hat der Wurf zweier idealer Münzen, wenn die Reihenfolge zählt?|2|3|4|6|2|Kopf/Kopf, Kopf/Zahl, Zahl/Kopf, Zahl/Zahl – vier Kombinationen.
+4|Wie heißt das Filtern der Würze vom Treber beim Bierbrauen?|Läutern|Destillieren|Pasteurisieren|Karbonisieren|0|Beim Läutern werden feste Maischereste und flüssige Würze getrennt.
+4|Ein Liter Wasser und ein Liter Bier: Welches Volumen ist größer?|Wasser|Bier|Beide gleich|Abhängig von der Glasform|2|Ein Liter bleibt ein Liter. Es geht um Volumen, nicht Gewicht.
+5|Wie viel ist 3 hoch 4?|12|27|64|81|3|3 × 3 × 3 × 3 = 81.
+5|Welches dieser Elemente hat die Ordnungszahl 1?|Sauerstoff|Wasserstoff|Helium|Kohlenstoff|1|Wasserstoff steht ganz vorne im Periodensystem.
+5|Welcher Begriff bezeichnet in der Statistik den mittleren Wert einer sortierten Liste?|Varianz|Median|Modus|Standardabweichung|1|Der Median teilt die sortierten Werte in zwei Hälften.
+5|Drei Geschwister haben zusammen 48 Jahre. Wie alt sind sie zusammen in zehn Jahren?|58|68|78|108|2|Drei Personen werden jeweils zehn Jahre älter, also 48 + 30 = 78.
+5|Wie viele Milliliter sind 0,075 Liter?|7,5|75|750|7500|1|0,075 × 1000 = 75 ml.
+5|Was beschreibt die Stammwürze beim Brauen?|Alkoholgehalt des fertigen Biers|Anteil gelöster Stoffe vor der Gärung|Alter der Brauerei|Die Farbe des Malzes|1|Stammwürze gibt Auskunft über die gelösten Extraktstoffe in der Würze.
+5|Du wirfst einen fairen Würfel zweimal. Wie groß ist die Wahrscheinlichkeit für zweimal die Sechs?|1/6|1/12|1/36|1/18|2|Die beiden unabhängigen Wahrscheinlichkeiten werden multipliziert: 1/6 × 1/6 = 1/36.
+5|Welche dieser Mengenangaben ist die größte?|0,4 Liter|350 ml|4 dl|450 ml|3|450 ml schlägt 400 ml und 350 ml.
+5|Welche Zahl ist das Ergebnis von 2³ + 3²?|13|17|25|36|1|8 + 9 = 17.
+5|Wie viele verschiedene zweistellige Zahlen lassen sich aus 1, 2 und 3 ohne Wiederholung bilden?|3|6|9|12|1|3 Möglichkeiten für die Zehnerstelle und 2 für die Einerstelle: 6.
+6|Ein Preis steigt erst um 20 Prozent und fällt dann um 20 Prozent. Wie ändert sich der Preis insgesamt?|Er bleibt gleich|Er fällt um 4 Prozent|Er steigt um 4 Prozent|Er fällt um 20 Prozent|1|1,2 × 0,8 = 0,96, also 4 Prozent weniger.
+6|Welcher pH-Wert ist bei 25 °C neutral?|0|5|7|14|2|Neutral bedeutet bei 25 °C pH 7.
+6|Welche Zahl fehlt: 1, 1, 2, 3, 5, 8, ...?|11|12|13|16|2|Die Fibonacci-Folge addiert jeweils die beiden letzten Zahlen.
+6|Wenn vier Maschinen vier Teile in vier Minuten produzieren, wie lange brauchen acht gleichartige Maschinen für acht Teile?|2 Minuten|4 Minuten|8 Minuten|16 Minuten|1|Jede Maschine macht ein Teil in vier Minuten. Acht Maschinen schaffen acht Teile ebenfalls in vier Minuten.
+6|Ein Fass enthält 40 Liter. Du entnimmst 25 Prozent des Inhalts. Wie viele Liter bleiben übrig?|10|15|25|30|3|Ein Viertel von 40 sind 10. Es bleiben 30 Liter.
+6|Bei einem normalen Kartenspiel mit 52 Karten: Wie viele Könige gibt es?|2|3|4|8|2|Es gibt einen König je Farbe, also vier.
+6|Welches dieser Bier-Verfahren kann zusätzliche Hopfenaromen bringen, ohne dass dabei gekocht wird?|Kalthopfung|Schockfrosten|Entsalzen|Entkoffeinieren|0|Beim Dry Hopping wird Hopfen nach dem Kochen zugegeben.
+6|Was ist die Quadratwurzel aus 0,0009?|0,003|0,03|0,3|3|1|0,03 × 0,03 = 0,0009.
+6|Eine Uhr zeigt 15:45. Wie viele Minuten sind es bis 18:10?|125|135|145|155|2|Von 15:45 bis 18:00 sind es 135 Minuten, plus zehn = 145.
+6|Ein fairer Würfel wird einmal geworfen. Wie groß ist die Chance für eine gerade Zahl?|1/6|1/3|1/2|2/3|2|2, 4 und 6 sind drei von sechs gleichwahrscheinlichen Ergebnissen.
+7|Welches Ergebnis hat 7! (sieben Fakultät)?|720|2520|5040|10080|2|7! = 7 × 6 × 5 × 4 × 3 × 2 × 1 = 5040.
+7|Welche Zahl erfüllt 3x + 7 = 31?|6|7|8|9|2|3x = 24, also x = 8.
+7|Ein fairer Würfel wird zweimal geworfen. Wie wahrscheinlich ist mindestens eine Sechs?|1/6|11/36|1/3|5/18|1|Gegenwahrscheinlichkeit: 1 − (5/6)² = 11/36.
+7|Welche Aussage über Licht im Vakuum ist korrekt?|Es braucht Luft|Seine Geschwindigkeit beträgt ungefähr 300.000 km/s|Es ist langsamer als Schall|Es hat keine Ausbreitungsgeschwindigkeit|1|Im Vakuum bewegt sich Licht mit etwa 299.792 km/s.
+7|Wie viele verschiedene Anordnungen haben die drei Buchstaben A, B und C?|3|6|9|12|1|3! = 6 unterschiedliche Anordnungen.
+7|Ein Würfel hat die Kantenlänge 3 cm. Welches Volumen hat er?|9 cm³|18 cm³|27 cm³|36 cm³|2|3³ = 27 Kubikzentimeter.
+7|Was passiert mit der Häufigkeit einer Note, wenn sich ihre Frequenz verdoppelt?|Sie wird eine Oktave höher|Sie wird eine Oktave tiefer|Sie wird doppelt so laut|Sie bleibt gleich|0|Eine Frequenzverdopplung entspricht einer Oktave.
+7|Du hast zwei exakt gleich schwere Kisten. Eine steht aufrecht, eine liegt flach. Was ist gleich?|Ihre Gewichtskraft|Ihre Grundfläche|Ihre Höhe|Ihr Druck auf den Boden|0|Die Gewichtskraft ist gleich, der Druck kann sich wegen der Kontaktfläche ändern.
+7|Ein Rabatt von 25 Prozent senkt den Preis auf 60 Euro. Was kostete der Artikel vorher?|70 €|75 €|80 €|85 €|2|60 Euro entsprechen 75 Prozent des ursprünglichen Preises. 60/0,75 = 80.
+7|Welches dieser Wörter ist kein Anagramm von „AMPEL“?|PALME|LAMPE|MALPE|PALMEN|3|PALMEN hat sechs Buchstaben. Die anderen verwenden dieselben fünf Buchstaben.
+8|Wie viele Minuten sind genau 1,5 Tage?|1440|1800|2160|2880|2|1,5 × 24 × 60 = 2160 Minuten.
+8|Ein Bakterienstamm verdoppelt sich jede Stunde. Nach 8 Stunden ist ein Gefäß voll. Wann war es halbvoll?|Nach 2 Stunden|Nach 4 Stunden|Nach 6 Stunden|Nach 7 Stunden|3|Bei Verdopplung ist es genau eine Stunde vorher halbvoll.
+8|Welcher dieser Brüche ist am größten?|5/12|7/16|3/7|4/9|3|4/9 ist etwa 0,444; die anderen liegen darunter.
+8|Wie viele eindeutige Händedrucke gibt es, wenn sich sechs Personen einmal gegenseitig die Hand geben?|12|15|18|30|1|Es gibt 6 × 5 / 2 = 15 Paare.
+8|Ein Passwort enthält genau drei Ziffern von 0 bis 9, Wiederholungen erlaubt. Wie viele Passwörter gibt es?|30|100|900|1000|3|Für jede Stelle gibt es 10 Optionen: 10³ = 1000. 000 zählt als Passwort.
+8|Welche Aussage zur Wahrscheinlichkeit ist richtig?|Zwei unabhängige faire Münzwürfe ergeben immer einmal Kopf|P(Kopf und Kopf) ist 1/4|P(Kopf und Kopf) ist 1/2|Nach Kopf muss Zahl kommen|1|Alle vier Ausgänge sind gleich wahrscheinlich, Kopf/Kopf ist einer davon.
+8|Wenn ein Rezept für 5 Liter 400 g Malz braucht, wie viel braucht es proportional für 13 Liter?|780 g|920 g|1040 g|1200 g|2|400 × 13/5 = 1040 Gramm.
+8|Welche dieser Zahlen ist durch 9 teilbar?|8271|8272|8273|8274|0|8 + 2 + 7 + 1 = 18. Die Quersumme ist durch 9 teilbar.
+8|Ein Quadrat hat eine Diagonale von 10 cm. Wie groß ist seine Fläche?|25 cm²|50 cm²|75 cm²|100 cm²|1|Die Fläche ist Diagonale²/2 = 100/2 = 50 cm².
+8|In einer Familie hat jedes von vier Kindern genau drei Geschwister. Wie viele Kinder gibt es?|4|8|12|16|0|Es sind dieselben vier Kinder: Jedes hat die anderen drei als Geschwister.
+9|Wie viele verschiedene fünfstellige PINs gibt es, wenn jede Ziffer verschieden sein muss und 0 vorne erlaubt ist?|15.120|30.240|60.480|100.000|1|10 × 9 × 8 × 7 × 6 = 30.240 mögliche PINs.
+9|Eine Zahl wird durch 5 geteilt und liefert Rest 3. Welchen Rest liefert ihr Doppeltes bei Division durch 5?|0|1|2|3|1|2 × 3 = 6. Bei Division durch 5 bleibt Rest 1.
+9|Für welchen Wert von x gilt 2^(x+1) = 64?|4|5|6|7|1|64 = 2⁶. Also x + 1 = 6 und x = 5.
+9|Wie viele verschiedene Diagonalen hat ein regelmäßiges Achteck?|16|18|20|24|2|n(n−3)/2 ergibt 8 × 5 / 2 = 20 Diagonalen.
+9|Welchen Mittelwert haben die Zahlen 2, 4, 6, 8, 10, 12?|6|7|8|9|1|Die Summe beträgt 42. Durch 6 geteilt ergibt das 7.
+9|Ein Würfel wird dreimal geworfen. Wie groß ist die Wahrscheinlichkeit, keine Sechs zu werfen?|25/36|125/216|5/18|1/2|1|(5/6)³ = 125/216. Die Sechs hält sich hier drei Würfe lang zurück.
+9|Ein Bierfass ist zu 3/5 gefüllt. Du entnimmst 1/3 des vorhandenen Inhalts. Welcher Anteil des ganzen Fasses bleibt?|1/5|2/5|3/10|4/5|1|3/5 × 2/3 = 2/5 des ganzen Fasses.
+9|Wie viele unterschiedliche dreistellige Zahlen kann man aus den Ziffern 0, 1, 2, 3 bilden, ohne eine Ziffer doppelt zu verwenden?|12|18|24|36|1|Hunderterstelle: 3 Optionen; dann 3 und 2, insgesamt 18.
+9|Du hast 100 € und verlierst nacheinander 10 % und 10 % des jeweils aktuellen Betrags. Wie viel bleibt?|80 €|81 €|82 €|90 €|1|100 × 0,9 × 0,9 = 81 Euro.
+9|Was ist das kleinste gemeinsame Vielfache von 12 und 18?|24|30|36|72|2|36 ist das kleinste positive Vielfache beider Zahlen.
+10|Wie viele Möglichkeiten gibt es, aus acht verschiedenen Personen genau drei für ein Team auszuwählen, ohne Rollen?|24|56|112|336|1|8 über 3 = 8 × 7 × 6 / (3 × 2 × 1) = 56.
+10|Eine Uhr geht pro Stunde 4 Minuten nach. Sie wird um 12:00 richtig gestellt. Welche Zeit zeigt sie nach 6 echten Stunden?|17:24|17:36|18:24|18:00|1|Sechs Stunden × vier Minuten = 24 Minuten Rückstand. Anzeige: 17:36.
+10|Eine faire Münze wird fünfmal geworfen. Wie wahrscheinlich sind genau drei Köpfe?|5/32|10/32|15/32|1/2|1|Es gibt 5 über 3 = 10 passende Folgen unter 2⁵ = 32 Folgen.
+10|Welche Zahl ist die kleinste positive Zahl, die sowohl durch 6, 8 als auch 15 teilbar ist?|60|90|120|240|2|Das kleinste gemeinsame Vielfache von 6, 8 und 15 ist 120.
+10|Ein Sack enthält vier rote und vier blaue Kugeln. Du ziehst ohne Zurücklegen drei Stück. Wie wahrscheinlich sind alle rot?|1/7|1/14|1/8|3/28|1|(4/8) × (3/7) × (2/6) = 1/14.
+10|Ein Würfel mit Kantenlänge 4 cm wird vollständig in Würfel von 1 cm Kante geteilt. Wie viele kleine Würfel liegen innen ohne Außenfläche?|4|8|16|24|1|Nur die inneren 2 × 2 × 2 Würfel berühren keine Außenfläche. Das sind 8.
+10|Ein Gast trinkt 2/3 seines Getränks, danach 1/2 des Restes. Welcher Anteil des ursprünglichen Getränks ist noch da?|1/3|1/4|1/6|1/9|2|Nach dem ersten Schluck bleibt 1/3, davon die Hälfte = 1/6.
+10|Wie viele sechsstellige Folgen aus den Ziffern 0 und 1 enthalten genau zwei Einsen?|12|15|20|30|1|Die Positionen der zwei Einsen wählt man aus sechs Stellen: 6 über 2 = 15.
+10|Welche Ziffer steht an der Einerstelle von 7^2026?|1|3|7|9|3|Die Endziffern laufen im Zyklus 7, 9, 3, 1. 2026 hat Rest 2 bei Division durch 4, also 9.
+10|Drei Personen sind unterschiedlich groß. In wie vielen Reihenfolgen können sie sich ohne weitere Vorgaben aufstellen?|3|6|9|12|1|3! = 6. Sogar die Familie bekommt eine eindeutige Reihenfolge hin – theoretisch.`.trim().split('\n').forEach(line => {
+    const [level,text,a,b,c,d,correct,explanation] = line.split('|').map(x=>x.trim());
+    CLASSIC_QUESTIONS.push({level:Number(level),category:Number(level)>=7?'Knallharte Knobelei':Number(level)>=4?'Wissen & absurde Logik':'Warm-up & Allgemeinwissen',difficulty:Math.min(3,Math.ceil(Number(level)/4)),text,options:[a,b,c,d],correct:Number(correct),explanation});
+  });
+  window.BIER_DATA = Object.freeze({ QUESTIONS, CLASSIC_QUESTIONS, ESTIMATES, FAMILY });
 })();
