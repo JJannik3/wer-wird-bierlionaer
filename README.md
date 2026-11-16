@@ -94,3 +94,12 @@ Die Klassikfragen stehen in `questions.js` in `CLASSIC_QUESTIONS`, sortiert nach
 - Ruhigeres, klareres Design und eine große Gewinnleiter direkt neben der Frage.
 - Die anderen drei Modi haben ihre bisherigen Regeln und ihr Schätzfinale behalten.
 - Alle Spielstände werden lokal im Browser gespeichert. Bei der Aktualisierung werden vorhandene Namen nach Möglichkeit übernommen; ein begonnenes Spiel aus der alten Version wird aus Sicherheitsgründen nicht unverändert fortgesetzt.
+
+
+## V3 · Echten Braukurs-Gutschein sicher einblenden
+
+In dieser Version wird am Ende der Geburtstagsshow der echte Jochen-Schweizer-Gutschein **als Vorschau mit vollständig verdecktem Einlösecode und QR-Code** gezeigt. Dafür werden zusätzlich die zwei Dateien `braukurs-gutschein-vorschau.png` und `braukurs-gutschein-vorschau.pdf` im Hauptverzeichnis mit hochgeladen.
+
+**WICHTIG:** Den Original-Gutschein `VJD1628846593619_A4.pdf` **nicht** auf das öffentliche GitHub-Repository hochladen! Der Original-PDF-Gutschein enthält einen einlösbaren Code, der sonst für alle sichtbar und nutzbar wäre. Den Original-Gutschein lieber ausdrucken oder privat übergeben.
+
+Die Bild- und PDF-Vorschau enthalten keinen Gutscheincode und keinen QR-Code. Die Originaldatei ist nicht Bestandteil dieses ZIP-Pakets.
