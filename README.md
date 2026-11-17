@@ -1,3 +1,32 @@
+# WER WIRD BIERLIONÄR? – V6
+
+## Neu in V6
+
+**Der klassische Modus hat jetzt 15 Fragen und die vollständige 15-stufige Gewinnleiter:**
+
+50 – 100 – 200 – 300 – 500 – 1.000 – 2.000 – 4.000 – 8.000 – 16.000 – 32.000 – 64.000 – 125.000 – 500.000 – **1.000.000 BP / goldener Bierpokal**.
+
+Jeder Kandidat entscheidet sich unmittelbar vor seinem Durchgang selbst:
+
+- **Sicherheitsvariante:** 3 Joker, Absicherung nach der 5. (500 BP) und 10. Frage (16.000 BP).
+- **Risikovariante:** 4 Joker, Absicherung nur nach der 5. Frage (500 BP).
+
+Wer falsch antwortet, beendet den Durchgang und fällt auf die jeweils letzte gesicherte Stufe zurück. Freiwilliger Ausstieg ist möglich. Nach dem letzten Kandidaten gewinnt die Person mit den meisten Bierpunkten den goldenen Bierpokal. Bei Gleichstand gibt es die Schätz-Stichfrage.
+
+Alle übrigen Spielmodi, die umfangreiche Fragensammlung, die Jokers und die *sichere* Vorschau des Braukurs-Gutscheins sind wie bisher erhalten. **Nie den echten Gutschein mit QR-/Einlösecode in ein öffentliches GitHub-Repository hochladen.**
+
+## GitHub Pages aktualisieren
+
+1. Repository `JJannik3/wer-wird-bierlionaer` öffnen.
+2. ZIP entpacken. Alle Dateien im Hauptverzeichnis (`index.html`, `app.js` usw.) ersetzen.
+3. Änderungen mit **Commit changes** speichern.
+4. Unter `Settings → Pages` sollte `Deploy from a branch`, `main`, `/(root)` eingestellt sein.
+5. Die Website öffnen: https://jjannik3.github.io/wer-wird-bierlionaer/
+
+**Die Original-PDF des Gutscheins nicht öffentlich hochladen.**
+
+---
+
 # WER WIRD BIERLIONÄR? — Version 5
 
 Die interaktive Familien-Quizshow für einen Moderator an Laptop/TV/Beamer.
@@ -6,7 +35,7 @@ Die interaktive Familien-Quizshow für einen Moderator an Laptop/TV/Beamer.
 
 - **639 unterschiedliche Multiple-Choice-Fragen**, davon **595 Fragen** auf der klassischen Gewinnleiter und **44 zusätzliche Themenfragen**.
 - **57 Fragekategorien**: Bierkunde, Tierisch absurd, Wissenschaft, kuriose Geschichte, Essen & Küche, Sehenswürdigkeiten, Kultur, Literatur, Popkultur, Sprachrätsel, Körper & Kuriositäten, Mythen, bizarre Fakten und viele mehr.
-- **40 oder mehr Fragen auf *jeder* der 10 Gewinnstufen** (konkrete Verteilung unten), statt nur zwölf.
+- **40 oder mehr Fragen auf *jeder* der 15 Gewinnstufen** (konkrete Verteilung unten), statt nur zwölf.
 - Viel weniger Mathe, deutlich mehr kurioses, skurriles, aber überprüfbares Allgemeinwissen.
 - Die Fragen werden pro Stufe bzw. Schwierigkeitsklasse zufällig und ohne Wiederholung innerhalb einer Runde gezogen, solange der Vorrat reicht.
 - Das aufgeräumte Startmenü zeigt die neue Themenvielfalt.
